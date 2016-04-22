@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HolaShalomModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Agency">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="hebrew" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Clients" Relationship="Self.FK_FIT_Agencies" FromRole="Agencies" ToRole="Clients" />
+  </EntityType>
+  <EntityType Name="Client">
+    <Key>
+      <PropertyRef Name="PNR" />
+    </Key>
+    <Property Name="PNR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="names" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PAX" Type="Int32" Nullable="false" />
+    <Property Name="num_arr" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="date_arr" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="num_dep" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="date_dep" Type="DateTime" Precision="0" />
+    <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="hotel_fk" Type="Int32" Nullable="false" />
+    <Property Name="agency_fk" Type="Int32" />
+    <Property Name="oneway" Type="Boolean" />
+    <Property Name="canceled" Type="Boolean" />
+    <Property Name="comments" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="date_update" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="depart_list" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="arrival_list_fk" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Agency" Relationship="Self.FK_FIT_Agencies" FromRole="Clients" ToRole="Agencies" />
+    <NavigationProperty Name="Clients1" Relationship="Self.FK_FIT_FIT" FromRole="Clients" ToRole="Clients1" />
+    <NavigationProperty Name="Client1" Relationship="Self.FK_FIT_FIT" FromRole="Clients1" ToRole="Clients" />
+    <NavigationProperty Name="Flight" Relationship="Self.FK_FIT_Flights_Arr" FromRole="Clients" ToRole="Flights" />
+    <NavigationProperty Name="Flight1" Relationship="Self.FK_FIT_Flights_Dep" FromRole="Clients" ToRole="Flights" />
+    <NavigationProperty Name="Hotel" Relationship="Self.FK_FIT_Hotels" FromRole="Clients" ToRole="Hotels" />
+  </EntityType>
+  <EntityType Name="DepartPlan">
+    <Key>
+      <PropertyRef Name="depart_list" />
+      <PropertyRef Name="hotel_fk" />
+    </Key>
+    <Property Name="depart_list" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="hotel_fk" Type="Int32" Nullable="false" />
+    <Property Name="date_dep_start" Type="DateTime" Precision="0" />
+    <Property Name="time" Type="Time" Precision="7" />
+    <Property Name="PAX" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Flight">
+    <Key>
+      <PropertyRef Name="num" />
+      <PropertyRef Name="date" />
+    </Key>
+    <Property Name="num" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="time" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+    <Property Name="destination" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="direction" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="time_approved" Type="Time" Precision="4" />
+    <Property Name="date_update" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Clients" Relationship="Self.FK_FIT_Flights_Arr" FromRole="Flights" ToRole="Clients" />
+    <NavigationProperty Name="Clients1" Relationship="Self.FK_FIT_Flights_Dep" FromRole="Flights" ToRole="Clients" />
+  </EntityType>
+  <EntityType Name="Guide">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="TourPlans" Relationship="Self.FK_Plan_Guides" FromRole="Guides" ToRole="TourPlan" />
+  </EntityType>
+  <EntityType Name="Hotel">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="alternative_point" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Clients" Relationship="Self.FK_FIT_Hotels" FromRole="Hotels" ToRole="Clients" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="hebrew" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="rate" Type="Decimal" Precision="10" Scale="1" />
+    <Property Name="capacity" Type="Int32" />
+    <NavigationProperty Name="TourPlans" Relationship="Self.FK_Plan_Products" FromRole="Products" ToRole="TourPlan" />
+  </EntityType>
+  <EntityType Name="Sale">
+    <Key>
+      <PropertyRef Name="PNR" />
+      <PropertyRef Name="product_fk" />
+    </Key>
+    <Property Name="PNR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="product_fk" Type="Int32" Nullable="false" />
+    <Property Name="persons" Type="Int32" Nullable="false" />
+    <Property Name="price" Type="Decimal" Precision="10" Scale="1" Nullable="false" />
+    <Property Name="sale_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="date_sale" Type="DateTime" Precision="0" />
+    <Property Name="date_update" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="paid" Type="Decimal" Precision="10" Scale="1" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TourPlan">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="time" Type="Time" Precision="4" />
+    <Property Name="tour_fk" Type="Int32" />
+    <Property Name="guide_fk" Type="Int32" />
+    <Property Name="comments" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="date_update" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Guide" Relationship="Self.FK_Plan_Guides" FromRole="TourPlan" ToRole="Guides" />
+    <NavigationProperty Name="Product" Relationship="Self.FK_Plan_Products" FromRole="TourPlan" ToRole="Products" />
+  </EntityType>
+  <Association Name="FK_FIT_Agencies">
+    <End Role="Agencies" Type="Self.Agency" Multiplicity="0..1" />
+    <End Role="Clients" Type="Self.Client" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Agencies">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Clients">
+        <PropertyRef Name="agency_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FIT_FIT">
+    <End Role="Clients" Type="Self.Client" Multiplicity="1" />
+    <End Role="Clients1" Type="Self.Client" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Clients">
+        <PropertyRef Name="PNR" />
+      </Principal>
+      <Dependent Role="Clients1">
+        <PropertyRef Name="PNR" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FIT_Flights_Arr">
+    <End Role="Flights" Type="Self.Flight" Multiplicity="1" />
+    <End Role="Clients" Type="Self.Client" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Flights">
+        <PropertyRef Name="num" />
+        <PropertyRef Name="date" />
+      </Principal>
+      <Dependent Role="Clients">
+        <PropertyRef Name="num_arr" />
+        <PropertyRef Name="date_arr" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FIT_Flights_Dep">
+    <End Role="Flights" Type="Self.Flight" Multiplicity="0..1" />
+    <End Role="Clients" Type="Self.Client" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Flights">
+        <PropertyRef Name="num" />
+        <PropertyRef Name="date" />
+      </Principal>
+      <Dependent Role="Clients">
+        <PropertyRef Name="num_dep" />
+        <PropertyRef Name="date_dep" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FIT_Hotels">
+    <End Role="Hotels" Type="Self.Hotel" Multiplicity="1" />
+    <End Role="Clients" Type="Self.Client" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hotels">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Clients">
+        <PropertyRef Name="hotel_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Plan_Guides">
+    <End Role="Guides" Type="Self.Guide" Multiplicity="0..1" />
+    <End Role="TourPlan" Type="Self.TourPlan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Guides">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TourPlan">
+        <PropertyRef Name="guide_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Plan_Products">
+    <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="TourPlan" Type="Self.TourPlan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TourPlan">
+        <PropertyRef Name="tour_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="HolaShalomEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Agencies" EntityType="Self.Agency" />
+    <EntitySet Name="Clients" EntityType="Self.Client" />
+    <EntitySet Name="DepartPlans" EntityType="Self.DepartPlan" />
+    <EntitySet Name="Flights" EntityType="Self.Flight" />
+    <EntitySet Name="Guides" EntityType="Self.Guide" />
+    <EntitySet Name="Hotels" EntityType="Self.Hotel" />
+    <EntitySet Name="Products" EntityType="Self.Product" />
+    <EntitySet Name="Sales" EntityType="Self.Sale" />
+    <EntitySet Name="TourPlans" EntityType="Self.TourPlan" />
+    <AssociationSet Name="FK_FIT_Agencies" Association="Self.FK_FIT_Agencies">
+      <End Role="Agencies" EntitySet="Agencies" />
+      <End Role="Clients" EntitySet="Clients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FIT_FIT" Association="Self.FK_FIT_FIT">
+      <End Role="Clients" EntitySet="Clients" />
+      <End Role="Clients1" EntitySet="Clients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FIT_Flights_Arr" Association="Self.FK_FIT_Flights_Arr">
+      <End Role="Flights" EntitySet="Flights" />
+      <End Role="Clients" EntitySet="Clients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FIT_Flights_Dep" Association="Self.FK_FIT_Flights_Dep">
+      <End Role="Flights" EntitySet="Flights" />
+      <End Role="Clients" EntitySet="Clients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FIT_Hotels" Association="Self.FK_FIT_Hotels">
+      <End Role="Hotels" EntitySet="Hotels" />
+      <End Role="Clients" EntitySet="Clients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Plan_Guides" Association="Self.FK_Plan_Guides">
+      <End Role="Guides" EntitySet="Guides" />
+      <End Role="TourPlan" EntitySet="TourPlans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Plan_Products" Association="Self.FK_Plan_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="TourPlan" EntitySet="TourPlans" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

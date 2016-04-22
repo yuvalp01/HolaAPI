@@ -1,0 +1,553 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="HolaShalomDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Agencies">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="hebrew" Type="nvarchar" MaxLength="50" />
+          <Property Name="address" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="PNR" />
+          </Key>
+          <Property Name="PNR" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="names" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="PAX" Type="int" Nullable="false" />
+          <Property Name="num_arr" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="date_arr" Type="date" Nullable="false" />
+          <Property Name="num_dep" Type="varchar" MaxLength="20" />
+          <Property Name="date_dep" Type="date" />
+          <Property Name="phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="hotel_fk" Type="int" Nullable="false" />
+          <Property Name="agency_fk" Type="int" Nullable="false" />
+          <Property Name="oneway" Type="bit" Nullable="false" />
+          <Property Name="comments" Type="nvarchar" MaxLength="250" />
+          <Property Name="date_update" Type="datetime" Nullable="false" />
+          <Property Name="depart_list" Type="nvarchar" MaxLength="50" />
+          <Property Name="arrival_list_fk" Type="nvarchar" MaxLength="50" />
+          <Property Name="canceled" Type="bit" Nullable="false" />
+          <Property Name="deleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DepartPlan">
+          <Key>
+            <PropertyRef Name="depart_list" />
+            <PropertyRef Name="hotel_fk" />
+          </Key>
+          <Property Name="depart_list" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="hotel_fk" Type="int" Nullable="false" />
+          <Property Name="date_dep_start" Type="date" />
+          <Property Name="time" Type="time" Precision="7" />
+          <Property Name="PAX" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Flights">
+          <Key>
+            <PropertyRef Name="num" />
+            <PropertyRef Name="date" />
+          </Key>
+          <Property Name="num" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
+          <Property Name="time" Type="char" MaxLength="5" />
+          <Property Name="destination" Type="nvarchar" MaxLength="50" />
+          <Property Name="direction" Type="varchar" MaxLength="20" />
+          <Property Name="time_approved" Type="time" Precision="4" />
+          <Property Name="date_update" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Guides">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="role" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Hotels">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="address" Type="varchar" MaxLength="250" />
+          <Property Name="meeting_point" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="code" Type="nvarchar" MaxLength="50" />
+          <Property Name="type" Type="nvarchar" MaxLength="50" />
+          <Property Name="hebrew" Type="nvarchar" MaxLength="50" />
+          <Property Name="rate" Type="decimal" Precision="10" Scale="1" Nullable="false" />
+          <Property Name="capacity" Type="int" />
+        </EntityType>
+        <EntityType Name="Sales">
+          <Key>
+            <PropertyRef Name="PNR" />
+            <PropertyRef Name="product_fk" />
+          </Key>
+          <Property Name="PNR" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="product_fk" Type="int" Nullable="false" />
+          <Property Name="persons" Type="int" Nullable="false" />
+          <Property Name="price" Type="decimal" Precision="10" Scale="1" Nullable="false" />
+          <Property Name="sale_type" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="date_sale" Type="date" Nullable="false" />
+          <Property Name="date_update" Type="datetime" Nullable="false" />
+          <Property Name="paid" Type="decimal" Precision="10" Scale="1" Nullable="false" />
+          <Property Name="canceled" Type="bit" Nullable="false" />
+          <Property Name="deleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TourPlan">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
+          <Property Name="time" Type="time" Precision="4" />
+          <Property Name="tour_fk" Type="int" />
+          <Property Name="guide_fk" Type="int" />
+          <Property Name="comments" Type="nvarchar" MaxLength="500" />
+          <Property Name="date_update" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Clients_Flights_Arr">
+          <End Role="Flights" Type="Self.Flights" Multiplicity="1" />
+          <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flights">
+              <PropertyRef Name="num" />
+              <PropertyRef Name="date" />
+            </Principal>
+            <Dependent Role="Clients">
+              <PropertyRef Name="num_arr" />
+              <PropertyRef Name="date_arr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Clients_Flights_Dep">
+          <End Role="Flights" Type="Self.Flights" Multiplicity="0..1" />
+          <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flights">
+              <PropertyRef Name="num" />
+              <PropertyRef Name="date" />
+            </Principal>
+            <Dependent Role="Clients">
+              <PropertyRef Name="num_dep" />
+              <PropertyRef Name="date_dep" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Plan_Guides">
+          <End Role="Guides" Type="Self.Guides" Multiplicity="0..1" />
+          <End Role="TourPlan" Type="Self.TourPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Guides">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TourPlan">
+              <PropertyRef Name="guide_fk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Plan_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+          <End Role="TourPlan" Type="Self.TourPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TourPlan">
+              <PropertyRef Name="tour_fk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HolaShalomDBModelStoreContainer">
+          <EntitySet Name="Agencies" EntityType="Self.Agencies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DepartPlan" EntityType="Self.DepartPlan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Flights" EntityType="Self.Flights" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Guides" EntityType="Self.Guides" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hotels" EntityType="Self.Hotels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sales" EntityType="Self.Sales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TourPlan" EntityType="Self.TourPlan" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Clients_Flights_Arr" Association="Self.FK_Clients_Flights_Arr">
+            <End Role="Flights" EntitySet="Flights" />
+            <End Role="Clients" EntitySet="Clients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Clients_Flights_Dep" Association="Self.FK_Clients_Flights_Dep">
+            <End Role="Flights" EntitySet="Flights" />
+            <End Role="Clients" EntitySet="Clients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Plan_Guides" Association="Self.FK_Plan_Guides">
+            <End Role="Guides" EntitySet="Guides" />
+            <End Role="TourPlan" EntitySet="TourPlan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Plan_Products" Association="Self.FK_Plan_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="TourPlan" EntitySet="TourPlan" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HolaShalomDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Agency">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="hebrew" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="PNR" />
+          </Key>
+          <Property Name="PNR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="names" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PAX" Type="Int32" Nullable="false" />
+          <Property Name="num_arr" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="date_arr" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="num_dep" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="date_dep" Type="DateTime" Precision="0" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="hotel_fk" Type="Int32" Nullable="false" />
+          <Property Name="agency_fk" Type="Int32" Nullable="false" />
+          <Property Name="oneway" Type="Boolean" Nullable="false" />
+          <Property Name="comments" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="date_update" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="depart_list" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="arrival_list_fk" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="canceled" Type="Boolean" Nullable="false" />
+          <Property Name="deleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Flight" Relationship="Self.FK_Clients_Flights_Arr" FromRole="Clients" ToRole="Flights" />
+          <NavigationProperty Name="Flight1" Relationship="Self.FK_Clients_Flights_Dep" FromRole="Clients" ToRole="Flights" />
+        </EntityType>
+        <EntityType Name="DepartPlan">
+          <Key>
+            <PropertyRef Name="depart_list" />
+            <PropertyRef Name="hotel_fk" />
+          </Key>
+          <Property Name="depart_list" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="hotel_fk" Type="Int32" Nullable="false" />
+          <Property Name="date_dep_start" Type="DateTime" Precision="0" />
+          <Property Name="time" Type="Time" Precision="7" />
+          <Property Name="PAX" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Flight">
+          <Key>
+            <PropertyRef Name="num" />
+            <PropertyRef Name="date" />
+          </Key>
+          <Property Name="num" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="time" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="destination" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="direction" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="time_approved" Type="Time" Precision="4" />
+          <Property Name="date_update" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Clients" Relationship="Self.FK_Clients_Flights_Arr" FromRole="Flights" ToRole="Clients" />
+          <NavigationProperty Name="Clients1" Relationship="Self.FK_Clients_Flights_Dep" FromRole="Flights" ToRole="Clients" />
+        </EntityType>
+        <EntityType Name="Guide">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="role" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TourPlans" Relationship="Self.FK_Plan_Guides" FromRole="Guides" ToRole="TourPlan" />
+        </EntityType>
+        <EntityType Name="Hotel">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="meeting_point" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="hebrew" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rate" Type="Decimal" Precision="10" Scale="1" Nullable="false" />
+          <Property Name="capacity" Type="Int32" />
+          <NavigationProperty Name="TourPlans" Relationship="Self.FK_Plan_Products" FromRole="Products" ToRole="TourPlan" />
+        </EntityType>
+        <EntityType Name="Sale">
+          <Key>
+            <PropertyRef Name="PNR" />
+            <PropertyRef Name="product_fk" />
+          </Key>
+          <Property Name="PNR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="product_fk" Type="Int32" Nullable="false" />
+          <Property Name="persons" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Decimal" Precision="10" Scale="1" Nullable="false" />
+          <Property Name="sale_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="date_sale" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="date_update" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="paid" Type="Decimal" Precision="10" Scale="1" Nullable="false" />
+          <Property Name="canceled" Type="Boolean" Nullable="false" />
+          <Property Name="deleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TourPlan">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="time" Type="Time" Precision="4" />
+          <Property Name="tour_fk" Type="Int32" />
+          <Property Name="guide_fk" Type="Int32" />
+          <Property Name="comments" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="date_update" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Guide" Relationship="Self.FK_Plan_Guides" FromRole="TourPlan" ToRole="Guides" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Plan_Products" FromRole="TourPlan" ToRole="Products" />
+        </EntityType>
+        <Association Name="FK_Clients_Flights_Arr">
+          <End Role="Flights" Type="Self.Flight" Multiplicity="1" />
+          <End Role="Clients" Type="Self.Client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flights">
+              <PropertyRef Name="num" />
+              <PropertyRef Name="date" />
+            </Principal>
+            <Dependent Role="Clients">
+              <PropertyRef Name="num_arr" />
+              <PropertyRef Name="date_arr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Clients_Flights_Dep">
+          <End Role="Flights" Type="Self.Flight" Multiplicity="0..1" />
+          <End Role="Clients" Type="Self.Client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flights">
+              <PropertyRef Name="num" />
+              <PropertyRef Name="date" />
+            </Principal>
+            <Dependent Role="Clients">
+              <PropertyRef Name="num_dep" />
+              <PropertyRef Name="date_dep" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Plan_Guides">
+          <End Role="Guides" Type="Self.Guide" Multiplicity="0..1" />
+          <End Role="TourPlan" Type="Self.TourPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Guides">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TourPlan">
+              <PropertyRef Name="guide_fk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Plan_Products">
+          <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="TourPlan" Type="Self.TourPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TourPlan">
+              <PropertyRef Name="tour_fk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HolaShalomDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Agencies" EntityType="Self.Agency" />
+          <EntitySet Name="Clients" EntityType="Self.Client" />
+          <EntitySet Name="DepartPlans" EntityType="Self.DepartPlan" />
+          <EntitySet Name="Flights" EntityType="Self.Flight" />
+          <EntitySet Name="Guides" EntityType="Self.Guide" />
+          <EntitySet Name="Hotels" EntityType="Self.Hotel" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="Sales" EntityType="Self.Sale" />
+          <EntitySet Name="TourPlans" EntityType="Self.TourPlan" />
+          <AssociationSet Name="FK_Clients_Flights_Arr" Association="Self.FK_Clients_Flights_Arr">
+            <End Role="Flights" EntitySet="Flights" />
+            <End Role="Clients" EntitySet="Clients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Clients_Flights_Dep" Association="Self.FK_Clients_Flights_Dep">
+            <End Role="Flights" EntitySet="Flights" />
+            <End Role="Clients" EntitySet="Clients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Plan_Guides" Association="Self.FK_Plan_Guides">
+            <End Role="Guides" EntitySet="Guides" />
+            <End Role="TourPlan" EntitySet="TourPlans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Plan_Products" Association="Self.FK_Plan_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="TourPlan" EntitySet="TourPlans" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HolaShalomDBModelStoreContainer" CdmEntityContainer="HolaShalomDBEntities">
+          <EntitySetMapping Name="Agencies">
+            <EntityTypeMapping TypeName="HolaShalomDBModel.Agency">
+              <MappingFragment StoreEntitySet="Agencies">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="hebrew" ColumnName="hebrew" />
+                <ScalarProperty Name="address" ColumnName="address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="HolaShalomDBModel.Client">
+              <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="PNR" ColumnName="PNR" />
+                <ScalarProperty Name="names" ColumnName="names" />
+                <ScalarProperty Name="PAX" ColumnName="PAX" />
+                <ScalarProperty Name="num_arr" ColumnName="num_arr" />
+                <ScalarProperty Name="date_arr" ColumnName="date_arr" />
+                <ScalarProperty Name="num_dep" ColumnName="num_dep" />
+                <ScalarProperty Name="date_dep" ColumnName="date_dep" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="hotel_fk" ColumnName="hotel_fk" />
+                <ScalarProperty Name="agency_fk" ColumnName="agency_fk" />
+                <ScalarProperty Name="oneway" ColumnName="oneway" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="date_update" ColumnName="date_update" />
+                <ScalarProperty Name="depart_list" ColumnName="depart_list" />
+                <ScalarProperty Name="arrival_list_fk" ColumnName="arrival_list_fk" />
+                <ScalarProperty Name="canceled" ColumnName="canceled" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DepartPlans">
+            <EntityTypeMapping TypeName="HolaShalomDBModel.DepartPlan">
+              <MappingFragment StoreEntitySet="DepartPlan">
+                <ScalarProperty Name="depart_list" ColumnName="depart_list" />
+                <ScalarProperty Name="hotel_fk" ColumnName="hotel_fk" />
+                <ScalarProperty Name="date_dep_start" ColumnName="date_dep_start" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="PAX" ColumnName="PAX" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Flights">
+            <EntityTypeMapping TypeName="HolaShalomDBModel.Flight">
+              <MappingFragment StoreEntitySet="Flights">
+                <ScalarProperty Name="num" ColumnName="num" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="destination" ColumnName="destination" />
+                <ScalarProperty Name="direction" ColumnName="direction" />
+                <ScalarProperty Name="time_approved" ColumnName="time_approved" />
+                <ScalarProperty Name="date_update" ColumnName="date_update" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Guides">
+            <EntityTypeMapping TypeName="HolaShalomDBModel.Guide">
+              <MappingFragment StoreEntitySet="Guides">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="role" ColumnName="role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Hotels">
+            <EntityTypeMapping TypeName="HolaShalomDBModel.Hotel">
+              <MappingFragment StoreEntitySet="Hotels">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="meeting_point" ColumnName="meeting_point" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="HolaShalomDBModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="hebrew" ColumnName="hebrew" />
+                <ScalarProperty Name="rate" ColumnName="rate" />
+                <ScalarProperty Name="capacity" ColumnName="capacity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sales">
+            <EntityTypeMapping TypeName="HolaShalomDBModel.Sale">
+              <MappingFragment StoreEntitySet="Sales">
+                <ScalarProperty Name="PNR" ColumnName="PNR" />
+                <ScalarProperty Name="product_fk" ColumnName="product_fk" />
+                <ScalarProperty Name="persons" ColumnName="persons" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="sale_type" ColumnName="sale_type" />
+                <ScalarProperty Name="date_sale" ColumnName="date_sale" />
+                <ScalarProperty Name="date_update" ColumnName="date_update" />
+                <ScalarProperty Name="paid" ColumnName="paid" />
+                <ScalarProperty Name="canceled" ColumnName="canceled" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TourPlans">
+            <EntityTypeMapping TypeName="HolaShalomDBModel.TourPlan">
+              <MappingFragment StoreEntitySet="TourPlan">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="tour_fk" ColumnName="tour_fk" />
+                <ScalarProperty Name="guide_fk" ColumnName="guide_fk" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="date_update" ColumnName="date_update" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

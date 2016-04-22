@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3af45bb0b03e4b1ba18fa0eeb4451775" Name="Diagram1">
+        <EntityTypeShape EntityType="HolaShalomDBModel.Agency" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Client" Width="1.5" PointX="5" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.DepartPlan" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Flight" Width="1.5" PointX="2.75" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Guide" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Hotel" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Product" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Sale" Width="1.5" PointX="7.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.TourPlan" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Clients_Flights_Arr" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Clients_Flights_Dep" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Plan_Guides" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Plan_Products" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
