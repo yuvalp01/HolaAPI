@@ -24,25 +24,26 @@ namespace HolaAPI.Controllers
             {
 
                 var tour_plans = from a in db.TourPlans
-                          join b in db.Products on a.tour_fk equals b.ID
-                          join c in db.Guides on a.guide_fk equals c.ID
-                          select new TourPlanDTO
-                          {
-                              ID = a.ID,
-                              date = a.date,
-                              time = a.time.Value.Hours + ":" + a.time.Value.Minutes,
-                              tour_fk = a.tour_fk,
-                              tour_name = b.name,
-                              guide_fk = a.guide_fk,
-                              guide_name = c.name,
-                              comments = a.comments,
-                              date_update = a.date_update
-                          };
+                                 join b in db.Products on a.product_fk equals b.ID
+                                 join c in db.Guides on a.guide_fk equals c.ID
+                                 select new TourPlanDTO
+                                 {
+                                     ID = a.ID,
+                                     date = a.date,
+                                     time = a.time.Value,//.Hours + ":" + a.time.Value.Minutes,
+                                     product_fk = a.product_fk,
+                                     tour_name = b.name,
+                                     guide_fk = a.guide_fk,
+                                     guide_name = c.name,
+                                     comments = a.comments,
+                                     date_update = a.date_update
+                                 };
                 return Ok(tour_plans.ToList());
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.BadRequest, ex.Message);
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
             }
 
         }
@@ -61,74 +62,60 @@ namespace HolaAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.BadRequest, ex.Message);
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
             }
 
 
         }
 
-        // DELETE: api/Products/5
+
+
         [ResponseType(typeof(TourPlan))]
-        public IHttpActionResult Delete(int id)
+        [HttpPut]
+        [Route("api/tourplan/CancelPlan/{ID}")]
+        public IHttpActionResult CancelClient(int ID)
         {
             try
             {
-                TourPlan tour = db.TourPlans.Find(id);
-                if (tour == null)
-                {
-                    return Content(HttpStatusCode.NotFound, string.Format("ID '{0}' does not exist in the table.", id));
-                }
+                var plan_to_cancel = db.TourPlans.SingleOrDefault(a => a.ID == ID && a.canceled == false);
+                plan_to_cancel.canceled = true;
+                plan_to_cancel.date_update = DateTime.Now;
 
-                db.TourPlans.Remove(tour);
                 db.SaveChanges();
-                return Ok(tour);
+                return Ok(plan_to_cancel);
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.BadRequest, ex.Message);
-
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.BadRequest, rootEx.Message);
             }
         }
 
 
+        [ResponseType(typeof(TourPlan))]
+        [HttpPut]
+        [ActionName("UpdatePlan")]
 
+        public IHttpActionResult UpdatePlan([FromBody] TourPlanDTO plan)
+        {
+            try
+            {
+                var plan_to_update = db.TourPlans.SingleOrDefault(a => a.ID == plan.ID && a.canceled == false);
+                plan_to_update.time = plan.time;
+                plan_to_update.guide_fk = plan.guide_fk;
+                plan_to_update.comments = plan.comments;
+                plan_to_update.date_update = DateTime.Now;
+                db.SaveChanges();
+                return Ok(plan_to_update);
+            }
 
-        //// PUT: api/Hotels/5
-        //[ResponseType(typeof(void))]
-        //public async Task<IHttpActionResult> PutHotel(int id, Hotel hotel)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    if (id != hotel.ID)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    db.Entry(hotel).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await db.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!HotelExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return StatusCode(HttpStatusCode.NoContent);
-        //}
-
-
+            catch (Exception ex)
+            {
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.BadRequest, rootEx.Message);
+            }
+        }
 
 
         protected override void Dispose(bool disposing)
@@ -153,8 +140,8 @@ namespace HolaAPI.Models
     {
         public int ID { get; set; }
         public DateTime date { get; set; }
-        public string time { get; set; }
-        public Nullable<int> tour_fk { get; set; }
+        public TimeSpan time { get; set; }
+        public Nullable<int> product_fk { get; set; }
         public string tour_name { get; set; }
         public Nullable<int> guide_fk { get; set; }
         public string guide_name { get; set; }
@@ -165,7 +152,28 @@ namespace HolaAPI.Models
 }
 
 
+//// DELETE: api/Products/5
+//[ResponseType(typeof(TourPlan))]
+//public IHttpActionResult Delete(int id)
+//{
+//    try
+//    {
+//        TourPlan tour = db.TourPlans.Find(id);
+//        if (tour == null)
+//        {
+//            return Content(HttpStatusCode.NotFound, string.Format("ID '{0}' does not exist in the table.", id));
+//        }
 
+//        db.TourPlans.Remove(tour);
+//        db.SaveChanges();
+//        return Ok(tour);
+//    }
+//    catch (Exception ex)
+//    {
+//        return Content(HttpStatusCode.BadRequest, ex.Message);
+
+//    }
+//}
 
 
 //// POST: api/Hotels

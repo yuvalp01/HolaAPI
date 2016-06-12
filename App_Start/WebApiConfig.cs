@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Tracing;
@@ -10,9 +12,10 @@ namespace HolaAPI
     {
         public static void Register(HttpConfiguration config)
         {
+           // config.EnableSystemDiagnosticsTracing();
+            //config.Services.Replace(typeof(ITraceWriter), new MyTraceWriter());
 
             config.MapHttpAttributeRoutes();
-
 
             config.Routes.MapHttpRoute(
               name: "ActionApi",

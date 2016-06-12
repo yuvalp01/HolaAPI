@@ -14,92 +14,30 @@ using System.Data.SqlClient;
 
 namespace HolaAPI.Controllers
 {
-    public class ClientsController : ApiController
+    public class ReservationController : ApiController
     {
         private HolaShalomDBEntities db = new HolaShalomDBEntities();
 
-        [ResponseType(typeof(IQueryable<ClientDTO>))]
-        [HttpGet]
-        public IHttpActionResult GetClients()
+
+
+
+        [ResponseType(typeof(ReservationDTO))]
+        public IHttpActionResult Post([FromBody]ReservationDTO reservation)
         {
             try
             {
 
-                var clients = from a in db.Clients
-                              join b in db.Hotels on a.hotel_fk equals b.ID
-                              join c in db.Agencies on a.agency_fk equals c.ID
-                              where a.canceled == false
-                              select new ClientDTO
-                              {
-                                  PNR = a.PNR,
-                                  names = a.names,
-                                  PAX = a.PAX,
-                                  num_arr = a.num_arr,
-                                  date_arr = a.date_arr,
-                                  num_dep = a.num_dep,
-                                  date_dep = a.date_dep,
-                                  phone = a.phone,
-                                  hotel_fk = a.hotel_fk,
-                                  hotel_name = b.name,
-                                  agency_fk = a.agency_fk,
-                                  agency_name = c.name,
-                                  oneway = a.oneway,
-                                  comments = a.comments
-                              };
-                return Ok(clients);
-            }
-            catch (Exception ex)
-            {
-                Exception rootEx = ex.GetBaseException();
-                return Content(HttpStatusCode.BadRequest, rootEx.Message);
-            }
-
-        }
-
-
-
-        [ResponseType(typeof(ClientDTO))]
-        [HttpGet]
-        [Route("api/clients/GetClient/{agency_fk}/{PNR}")]
-        public IHttpActionResult GetClient(int agency_fk, string PNR)
-        {
-            try
-            {
-                var client = db.Clients.Where(a => a.agency_fk == agency_fk && a.PNR == PNR && a.canceled == false).Select(a => new ClientDTO
+                Client client = new Client()
                 {
-                    PNR = a.PNR,
-                    names = a.names,
-                    PAX = a.PAX,
-                    num_arr = a.num_arr,
-                    date_arr = a.date_arr,
-                    num_dep = a.num_dep,
-                    date_dep = a.date_dep,
-                    phone = a.phone,
-                    hotel_fk = a.hotel_fk,
-                    agency_fk = a.agency_fk,
-                    oneway = a.oneway,
-                    comments = a.comments
-                });
-                return Ok(client);
-            }
-            catch (Exception ex)
-            {
-                Exception rootEx = ex.GetBaseException();
-                return Content(HttpStatusCode.BadRequest, rootEx.Message);
-            }
+                     PNR = reservation.phone,
+                     agency_fk = reservation.agency_fk,
 
-        }
+                    date_update = DateTime.Now,
+                    canceled = false,
 
 
+                };
 
-        [ResponseType(typeof(Client))]
-        public IHttpActionResult Post([FromBody]Client client)
-        {
-            try
-            {
-              
-                client.date_update = DateTime.Now;
-                client.canceled = false;
                 db.Clients.Add(client);
                 //extract transportation type from products table. It could be either 'bus' 'one way bus'
                 int _product_fk;
@@ -108,7 +46,7 @@ namespace HolaAPI.Controllers
                 //all agencies except for Hola Shalom (100) are BIZ. BIZ clients already paid to the agency
                 string _sale_type = "BIZ";
                 decimal _remained_pay = 0;
-                if (client.agency_fk==100)
+                if (client.agency_fk == 100)
                 {
                     _sale_type = "PRI";
                     _remained_pay = db.Products.SingleOrDefault(a => a.ID == _product_fk).rate;
@@ -161,7 +99,7 @@ namespace HolaAPI.Controllers
                 var client_to_cancel = db.Clients.SingleOrDefault(a => a.PNR == PNR && a.agency_fk == agency_fk && a.canceled == false);
                 client_to_cancel.canceled = true;
                 client_to_cancel.date_update = DateTime.Now;
-                IQueryable<Sale> sales_to_cancel = db.Sales.Where(x => x.PNR == PNR && x.agency_fk==agency_fk);
+                IQueryable<Sale> sales_to_cancel = db.Sales.Where(x => x.PNR == PNR && x.agency_fk == agency_fk);
                 foreach (Sale sale in sales_to_cancel)
                 {
                     sale.canceled = true;
@@ -249,30 +187,32 @@ namespace HolaAPI.Controllers
 
 namespace HolaAPI.Models
 {
-    public class ClientDTO
+
+
+    public class ReservationDTO
     {
 
         public string PNR { get; set; }
+        public int agency_fk { get; set; }
         public string names { get; set; }
         public int PAX { get; set; }
         public string num_arr { get; set; }
         public DateTime date_arr { get; set; }
         public string num_dep { get; set; }
-        public Nullable<DateTime> date_dep { get; set; }
+        public DateTime date_dep { get; set; }
         public string phone { get; set; }
         public int hotel_fk { get; set; }
-        public string hotel_name { get; set; }
-        public int agency_fk { get; set; }
-        public string agency_name { get; set; }
-        public bool oneway { get; set; }
         public bool canceled { get; set; }
         public string comments { get; set; }
         public DateTime date_update { get; set; }
-        public string depart_list { get; set; }
-        public string arrival_list_fk { get; set; }
+
+        public string sale_type { get; set; }
+        public int product_fk { get; set; }
+        public int remained_pay { get; set; }
+
+        public string hotel_name { get; set; }
+        public string agency_name { get; set; }
     }
-
-
 
 }
 
@@ -286,51 +226,3 @@ namespace HolaAPI.Models
 
 
 
-
-
-
-
-//public IQueryable<ClientDTO> GetClients()
-//{
-
-//    return db.Clients.Select(a => new ClientDTO
-//    {
-//        PNR = a.PNR,
-//        names = a.names,
-//        PAX = a.PAX,
-//        num_arr = a.num_arr,
-//        date_arr = a.date_arr,
-//        num_dep = a.num_dep,
-//        date_dep = a.date_dep,
-//        phone = a.phone,
-//        hotel_fk = a.hotel_fk,
-//        agency_fk = a.agency_fk,
-//        oneway = a.oneway,
-//        comments = a.comments
-
-//    });
-//}
-
-
-//// DELETE: api/Clients/5
-//[ResponseType(typeof(Client))]
-//public IHttpActionResult Delete(int PNR)
-//{
-//    try
-//    {
-//        Client client = db.Clients.Find(PNR);
-//        if (client == null)
-//        {
-//            return Content(HttpStatusCode.NotFound, string.Format("ID '{0}' does not exist in the table.", PNR));
-//        }
-
-//        db.Clients.Remove(client);
-//        db.SaveChanges();
-//        return Ok(client);
-//    }
-//    catch (Exception ex)
-//    {
-//        return Content(HttpStatusCode.BadRequest, ex.Message);
-
-//    }
-//}

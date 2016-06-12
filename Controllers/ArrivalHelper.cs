@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Web;
-using System.Web.Script.Serialization;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Data.Entity.Infrastructure;
 using HolaAPI.Models;
 
 public class Arrival
@@ -40,12 +36,7 @@ public class FlightDetails
 /// </summary>
 public class ArrivalHelper
 {
-    public ArrivalHelper()
-    {
-        //
-        // TODO: Add constructor logic here
-        //
-    }
+
 
     public List<TourPlanDTO> getTourPlan(string date_start, string date_end)
     {
@@ -55,12 +46,12 @@ public class ArrivalHelper
         using (HolaShalomDBEntities db = new HolaShalomDBEntities())
         {
             var query = from a in db.TourPlans
-                        join b in db.Products on a.tour_fk equals b.ID
+                        join b in db.Products on a.product_fk equals b.ID
                         where a.date >= dateStart && a.date <= dateEnd
                         select new TourPlanDTO
                         {
                             date = a.date,
-                            time = a.time.Value.Hours + ":" + a.time.Value.Minutes,
+                            time = a.time.Value,
                             tour_name = b.name,
                             comments = a.comments
                         };
@@ -78,14 +69,9 @@ public class ArrivalHelper
     public List<Arrival> getListArrival(string date_start_str, string flights_str)
     {
 
-        //try
-        //{
         DateTime date_start = Convert.ToDateTime(date_start_str);
         string[] flights_array = flights_str.Split('~');
         List<FlightDetails> flights = DataHelper.boxFlightInfo(flights_str);
-        //string list_fk = date_start_str + "_" + flights[0].num;
-        //list_fk = flights.Count > 1 ? list_fk + "_" + flights[1].num : list_fk;
-
         List<SaleRow> salesTable = getSalesTable();
         using (HolaShalomDBEntities db = new HolaShalomDBEntities())
         {
@@ -111,15 +97,6 @@ public class ArrivalHelper
                 }
             }
 
-            //var clients_flight = _clients.Where(a => a.date_arr == date1 && a.num_arr == num1);
-
-            //if (flights.Count == 2)
-            //{
-            //    DateTime date2 = flights[1].date;
-            //    string num2 = flights[1].num;
-            //    clients_flight = _clients.Where(a => (a.date_arr == date1 && a.num_arr == num1) || (a.date_arr == date2 && a.num_arr == num2));
-
-            //}
 
             var query = from a in salesTable
                         join b in clients_filter_all on a.PNR equals b.PNR
@@ -144,11 +121,6 @@ public class ArrivalHelper
 
             return query.ToList<Arrival>();
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    //return "Data Error: " + ex.Message;
-            //}
         }
     }
 
@@ -199,3 +171,13 @@ public class ArrivalHelper
 }
 
 
+
+//var clients_flight = _clients.Where(a => a.date_arr == date1 && a.num_arr == num1);
+
+//if (flights.Count == 2)
+//{
+//    DateTime date2 = flights[1].date;
+//    string num2 = flights[1].num;
+//    clients_flight = _clients.Where(a => (a.date_arr == date1 && a.num_arr == num1) || (a.date_arr == date2 && a.num_arr == num2));
+
+//}

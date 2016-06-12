@@ -5,46 +5,54 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using System.Web.Http.Description;
 
 namespace HolaAPI.Controllers
 {
     public class ArrivalsController : ApiController
     {
         private HolaShalomDBEntities db = new HolaShalomDBEntities();
-        // GET: api/Arrival
-        public IEnumerable<string> Get()
+        
+        [ResponseType(typeof(List<Arrival>))]
+        public IHttpActionResult GetArrivals([FromUri] string date_start, [FromUri] string flights)
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                ArrivalHelper helper = new ArrivalHelper();
+                var arrivals = helper.getListArrival(date_start, flights);
+                return Ok(arrivals);
+            }
+            catch (Exception ex)
+            {
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
+            }
+
+
         }
 
-
-        public List<Arrival> GetArrivals([FromUri] string date_start, [FromUri] string flights)
-        {
-            ArrivalHelper helper = new ArrivalHelper();
-            return helper.getListArrival(date_start, flights);
-
-        }
-
+        [ResponseType(typeof(List<TourPlanDTO>))]
         [ActionName("GetPlan")]
         [HttpGet]
-        public List<TourPlanDTO> GetPlan([FromUri] string date_start, [FromUri] string date_end)
+        public IHttpActionResult GetPlan([FromUri] string date_start, [FromUri] string date_end)
         {
-            ArrivalHelper helper = new ArrivalHelper();
-            return helper.getTourPlan(date_start, date_end);
+            try
+            {
+                ArrivalHelper helper = new ArrivalHelper();
+                var tourPlan = helper.getTourPlan(date_start, date_end);
+                return Ok(tourPlan);
+            }
+            catch (Exception ex)
+            {
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
+            }
+
 
         }
 
 
-        public void Put(int id, [FromBody]string value)
-        {
 
-        }
-
-        // DELETE: api/Arrival/5
-        public void Delete(int id)
-        {
-        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -53,69 +61,81 @@ namespace HolaAPI.Controllers
             }
             base.Dispose(disposing);
         }
-
-
-        private List<SaleRow> getSalesTable()
-        {
-            using (HolaShalomDBEntities db = new HolaShalomDBEntities())
-            {
-
-                List<SaleRow> salesTable = (from a in db.Sales
-                                            group a by a.PNR into g
-                                            select new SaleRow { PNR = g.Key }).ToList();
-
-                foreach (SaleRow row in salesTable)
-                {
-                    var products = from a in db.Sales
-                                   where a.PNR == row.PNR
-                                   group a by new { a.product_fk } into g
-                                   select new { g.Key.product_fk, people = g.Sum(s => s.persons) };
-                    foreach (var item in products)
-                    {
-                        switch (item.product_fk)
-                        {
-
-                            case 11:
-                                row.MKF = item.people;
-                                break;
-                            case 12:
-                                row.VDN = item.people;
-                                break;
-                            case 13:
-                                row.FIG = item.people;
-                                break;
-                            case 14:
-                                row.MON = item.people;
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-                }
-                return salesTable;
-
-            }
-
-        }
     }
 
 }
 
-namespace HolaAPI.Models
-{
-    public class Arrival_Info
-    {
-
-        public string date_start { get; set; }
-        public string date_end { get; set; }
-        public string flights { get; set; }
-
-    }
 
 
 
-}
+
+
+
+//private List<SaleRow> getSalesTable()
+//{
+//    using (HolaShalomDBEntities db = new HolaShalomDBEntities())
+//    {
+
+//        List<SaleRow> salesTable = (from a in db.Sales
+//                                    group a by a.PNR into g
+//                                    select new SaleRow { PNR = g.Key }).ToList();
+
+//        foreach (SaleRow row in salesTable)
+//        {
+//            var products = from a in db.Sales
+//                           where a.PNR == row.PNR
+//                           group a by new { a.product_fk } into g
+//                           select new { g.Key.product_fk, people = g.Sum(s => s.persons) };
+//            foreach (var item in products)
+//            {
+//                switch (item.product_fk)
+//                {
+
+//                    case 11:
+//                        row.MKF = item.people;
+//                        break;
+//                    case 12:
+//                        row.VDN = item.people;
+//                        break;
+//                    case 13:
+//                        row.FIG = item.people;
+//                        break;
+//                    case 14:
+//                        row.MON = item.people;
+//                        break;
+
+//                    default:
+//                        break;
+//                }
+//            }
+//        }
+//        return salesTable;
+
+//    }
+
+//}
+
+
+
+
+
+
+
+
+//namespace HolaAPI.Models
+//{
+//    public class Arrival_Info
+//    {
+
+//        public string date_start { get; set; }
+//        public string date_end { get; set; }
+//        public string flights { get; set; }
+
+//    }
+
+
+
+//}
 
 
 

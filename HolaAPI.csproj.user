@@ -9,7 +9,7 @@
     <WebStackScaffolding_DbContextTypeFullName>HolaAPI.Models.HolaShalomEntities</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <ProjectView>ProjectFiles</ProjectView>
-    <NameOfLastUsedPublishProfile>holashalom</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>holashalom-test</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

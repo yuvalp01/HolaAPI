@@ -37,11 +37,11 @@ namespace HolaAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.BadRequest, ex.Message);
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
             }
         }
 
-        //[Route("api/products/{types}")]
         [ResponseType(typeof(List<ProductDTO>))]
         public IHttpActionResult GetProducts([FromUri]string types)
         {
@@ -63,7 +63,8 @@ namespace HolaAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.BadRequest, ex.Message);
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
             }
 
         }
@@ -81,35 +82,12 @@ namespace HolaAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.BadRequest, ex.Message);
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
             }
 
 
         }
-
-        // DELETE: api/Products/5
-        [ResponseType(typeof(Product))]
-        public IHttpActionResult Delete(int id)
-        {
-            try
-            {
-                Product product = db.Products.Find(id);
-                if (product == null)
-                {
-                    return Content(HttpStatusCode.NotFound, string.Format("ID '{0}' does not exist in the table.", id));
-                }
-
-                db.Products.Remove(product);
-                db.SaveChanges();
-                return Ok(product);
-            }
-            catch (Exception ex)
-            {
-                return Content(HttpStatusCode.BadRequest, ex.Message);
-
-            }
-        }
-
 
 
         protected override void Dispose(bool disposing)
@@ -134,7 +112,6 @@ namespace HolaAPI.Models
         public string name { get; set; }
         public string code { get; set; }
         public string type { get; set; }
-        //public string hebrew { get; set; }
         public Nullable<decimal> rate { get; set; }
         public Nullable<int> capacity { get; set; }
     }

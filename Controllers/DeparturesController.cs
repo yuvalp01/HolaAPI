@@ -41,7 +41,8 @@ namespace HolaAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.InternalServerError, ex.Message);
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
             }
 
 
@@ -49,58 +50,80 @@ namespace HolaAPI.Controllers
 
 
 
+        [ResponseType(typeof(IQueryable<DepartPlanDTO>))]
         [ActionName("GetPlan")]
         [HttpGet]
-        public IQueryable<DepartPlanDTO> GetPlan([FromUri]string depart_list)
+        public IHttpActionResult GetPlan([FromUri]string depart_list)
         {
+            try
+            {
+                var plan =  from a in db.DepartPlans
+                       where a.depart_list == depart_list
+                       join b in db.Hotels on a.hotel_fk equals b.ID
+                       orderby a.time
+                       select new DepartPlanDTO
+                       {
+                           depart_list = a.depart_list,
+                           hotel_fk = a.hotel_fk,
+                           hotel = b.name,
+                           time = a.time,
+                           PAX = a.PAX
+                       };
+                return Ok(plan);
+            }
+            catch (Exception ex)
+            {
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
+                throw;
+            }
 
-            return from a in db.DepartPlans
-                   where a.depart_list == depart_list
-                   join b in db.Hotels on a.hotel_fk equals b.ID
-                   orderby a.time
-                   select new DepartPlanDTO
-                   {
-                       depart_list = a.depart_list,
-                       hotel_fk = a.hotel_fk,
-                       hotel = b.name,
-                       time = a.time,
-                       PAX = a.PAX
-                   };
 
         }
 
-
+        [ResponseType (typeof( List<DepartPlanDTO>))]
         [ActionName("CreatePlan")]
         [HttpPost]
-        public List<DepartPlanDTO> CreatePlan([FromUri] string date_dep_start, [FromUri] string flights)
+        public IHttpActionResult  CreatePlan([FromUri] string date_dep_start, [FromUri] string flights)
         {
+            try
+            {
+                DepartHelper helper = new DepartHelper(date_dep_start, flights);
+                List<DepartPlanDTO> departPlan = helper.getNewDepartPlan();
+                return Ok(departPlan);
+            }
+            catch (Exception ex)
+            {
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
+                throw;
+            }
 
-            DepartHelper helper = new DepartHelper(date_dep_start, flights);
-            List<DepartPlanDTO> departPlan = helper.getNewDepartPlan();
-            return departPlan;
 
 
         }
-
+        [ResponseType(typeof(DepartPlanDTO))]
         [ActionName("UpdatePlan")]
         [HttpPut]
-        public DepartPlanDTO UpdatePlan([FromBody] DepartPlanDTO line)
+        public IHttpActionResult UpdatePlan([FromBody] DepartPlanDTO line)
         {
+            try
+            {
+                DepartPlan line_to_update = db.DepartPlans.Find(line.depart_list, line.hotel_fk);
+                line_to_update.time = line.time;
+                db.SaveChanges();
+                return Ok( line);
+            }
+            catch (Exception ex)
+            {
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
+                throw;
+            }
 
-            DepartPlan line_to_update = db.DepartPlans.Find(line.depart_list, line.hotel_fk);
-            line_to_update.time = line.time;
-            db.SaveChanges();
-            return line;
         }
 
 
-
-
-
-        // DELETE: api/Arrival/5
-        public void Delete(int id)
-        {
-        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -25,12 +25,11 @@
           <ScalarProperty Name="hotel_fk" ColumnName="hotel_fk" />
           <ScalarProperty Name="agency_fk" ColumnName="agency_fk" />
           <ScalarProperty Name="oneway" ColumnName="oneway" />
+          <ScalarProperty Name="canceled" ColumnName="canceled" />
           <ScalarProperty Name="comments" ColumnName="comments" />
           <ScalarProperty Name="date_update" ColumnName="date_update" />
           <ScalarProperty Name="depart_list" ColumnName="depart_list" />
           <ScalarProperty Name="arrival_list_fk" ColumnName="arrival_list_fk" />
-          <ScalarProperty Name="canceled" ColumnName="canceled" />
-          <ScalarProperty Name="deleted" ColumnName="deleted" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -75,6 +74,21 @@
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="address" ColumnName="address" />
           <ScalarProperty Name="meeting_point" ColumnName="meeting_point" />
+          <ScalarProperty Name="city" ColumnName="city" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Payments">
+      <EntityTypeMapping TypeName="HolaShalomDBModel.Payment">
+        <MappingFragment StoreEntitySet="Payments">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="sale_fk" ColumnName="sale_fk" />
+          <ScalarProperty Name="sum" ColumnName="sum" />
+          <ScalarProperty Name="date_payment" ColumnName="date_payment" />
+          <ScalarProperty Name="date_update" ColumnName="date_update" />
+          <ScalarProperty Name="paid_to" ColumnName="paid_to" />
+          <ScalarProperty Name="method" ColumnName="method" />
+          <ScalarProperty Name="C_type" ColumnName="_type" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -94,16 +108,18 @@
     <EntitySetMapping Name="Sales">
       <EntityTypeMapping TypeName="HolaShalomDBModel.Sale">
         <MappingFragment StoreEntitySet="Sales">
+          <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="PNR" ColumnName="PNR" />
+          <ScalarProperty Name="agency_fk" ColumnName="agency_fk" />
           <ScalarProperty Name="product_fk" ColumnName="product_fk" />
+          <ScalarProperty Name="plan_fk" ColumnName="plan_fk" />
           <ScalarProperty Name="persons" ColumnName="persons" />
-          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="remained_pay" ColumnName="remained_pay" />
           <ScalarProperty Name="sale_type" ColumnName="sale_type" />
           <ScalarProperty Name="date_sale" ColumnName="date_sale" />
           <ScalarProperty Name="date_update" ColumnName="date_update" />
-          <ScalarProperty Name="paid" ColumnName="paid" />
           <ScalarProperty Name="canceled" ColumnName="canceled" />
-          <ScalarProperty Name="deleted" ColumnName="deleted" />
+          <ScalarProperty Name="comments" ColumnName="comments" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -113,10 +129,28 @@
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="date" ColumnName="date" />
           <ScalarProperty Name="time" ColumnName="time" />
-          <ScalarProperty Name="tour_fk" ColumnName="tour_fk" />
+          <ScalarProperty Name="product_fk" ColumnName="product_fk" />
           <ScalarProperty Name="guide_fk" ColumnName="guide_fk" />
           <ScalarProperty Name="comments" ColumnName="comments" />
           <ScalarProperty Name="date_update" ColumnName="date_update" />
+          <ScalarProperty Name="canceled" ColumnName="canceled" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Upload_temp">
+      <EntityTypeMapping TypeName="HolaShalomDBModel.Upload_temp">
+        <MappingFragment StoreEntitySet="Upload_temp">
+          <ScalarProperty Name="PNR" ColumnName="PNR" />
+          <ScalarProperty Name="names" ColumnName="names" />
+          <ScalarProperty Name="PAX" ColumnName="PAX" />
+          <ScalarProperty Name="num_arr" ColumnName="num_arr" />
+          <ScalarProperty Name="date_arr" ColumnName="date_arr" />
+          <ScalarProperty Name="num_dep" ColumnName="num_dep" />
+          <ScalarProperty Name="date_dep" ColumnName="date_dep" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+          <ScalarProperty Name="hotel_name" ColumnName="hotel_name" />
+          <ScalarProperty Name="comments" ColumnName="comments" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

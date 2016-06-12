@@ -25,13 +25,14 @@ namespace HolaAPI.Models
         public int hotel_fk { get; set; }
         public int agency_fk { get; set; }
         public bool oneway { get; set; }
+        public bool canceled { get; set; }
         public string comments { get; set; }
         public System.DateTime date_update { get; set; }
         public string depart_list { get; set; }
         public string arrival_list_fk { get; set; }
-        public bool canceled { get; set; }
-        public bool deleted { get; set; }
     
+        public virtual Agency Agency { get; set; }
+        public virtual Hotel Hotel { get; set; }
         public virtual Flight Flight { get; set; }
         public virtual Flight Flight1 { get; set; }
     }

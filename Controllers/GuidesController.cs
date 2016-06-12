@@ -17,11 +17,19 @@ namespace HolaAPI.Controllers
     {
         private HolaShalomDBEntities db = new HolaShalomDBEntities();
 
-
-        public IQueryable<GuideDTO> Get()
+        [ResponseType(typeof(IQueryable<GuideDTO>))]
+        public IHttpActionResult Get()
         {
-
-            return db.Guides.Select(a => new GuideDTO { ID = a.ID, name = a.name, phone = a.phone });
+            try
+            {
+                var guides =  db.Guides.Select(a => new GuideDTO { ID = a.ID, name = a.name, phone = a.phone });
+                return Ok(guides);
+            }
+            catch (Exception ex)
+            {
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
+            }
         }
 
 
@@ -37,7 +45,8 @@ namespace HolaAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.BadRequest, ex.Message);
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
             }
 
 
@@ -61,8 +70,8 @@ namespace HolaAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.BadRequest, ex.Message);
-
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
             }
         }
 

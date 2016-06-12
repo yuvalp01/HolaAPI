@@ -76,7 +76,8 @@ namespace HolaAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.BadRequest, ex.Message);
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.BadRequest, rootEx.Message);
             }
 
 
@@ -100,48 +101,48 @@ namespace HolaAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.BadRequest, ex.Message);
-
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.BadRequest, rootEx.Message);
             }
         }
 
 
 
 
-        // PUT: api/Hotels/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutHotel(int id, Hotel hotel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //// PUT: api/Hotels/5
+        //[ResponseType(typeof(void))]
+        //public async Task<IHttpActionResult> PutHotel(int id, Hotel hotel)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            if (id != hotel.ID)
-            {
-                return BadRequest();
-            }
+        //    if (id != hotel.ID)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            db.Entry(hotel).State = EntityState.Modified;
+        //    db.Entry(hotel).State = EntityState.Modified;
 
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HotelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!HotelExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return StatusCode(HttpStatusCode.NoContent);
-        }
+        //    return StatusCode(HttpStatusCode.NoContent);
+        //}
 
 
 

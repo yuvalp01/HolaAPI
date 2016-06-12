@@ -7,38 +7,7 @@ using System.Data.SqlClient;
 using System.Data.Entity.Infrastructure;
 using HolaAPI.Models;
 
-namespace HolaAPI.Models
-{
-    public class DepartPlanDTO
-    {
-        public string depart_list { get; set; }
-        public string hotel { get; set; }
-        public int hotel_fk { get; set; }
-        public Nullable<System.TimeSpan> time { get; set; }
-        public int PAX { get; set; }
 
-    }
-//    select new Departure  { title = "[" + a.PNR + "] " + a.names, a.PNR, a.names, a.phone, a.PAX, hotel = b.name + ": " + c.time.Value.Hours + ":" + c.time.Value.Minutes
-//};
-
-public class Departure
-    {
-        public string PNR { get; set; }
-        public string names { get; set; }
-        public string title { get; set; }
-        public TimeSpan time { get; set; }
-        public string hotel { get; set; }
-        public string phone { get; set; }
-        public int PAX { get; set; }
-        public string meeting_point { get; set; }
-        //public int MKF { get; set; }
-        //public int VDN { get; set; }
-        //public int FIG { get; set; }
-        //public int MON { get; set; }
-
-    }
-
-}
 
 
 /// <summary>
@@ -46,7 +15,6 @@ public class Departure
 /// </summary>
 public class DepartHelper
 {
-    //public string FlightStr { get; set; }
     public string DateDepStartStr { get; set; }
     public string Depart_list { get; set; }
     public List<FlightDetails> Flights { get; set; }
@@ -66,8 +34,6 @@ public class DepartHelper
 
     public List<DepartPlanDTO> getNewDepartPlan()
     {
-        //DateTime date_dep_start = Convert.ToDateTime(date_dep_start_str);
-
         using (HolaShalomDBEntities db = new HolaShalomDBEntities())
         {
 
@@ -95,31 +61,7 @@ public class DepartHelper
             return query.ToList();
         }
     }
-    //public string getDepartureList()
-    //{
 
-    //    try
-    //    {
-    //        using (HolaShalomDBEntities db = new HolaShalomDBEntities())
-    //        {
-    //            var query = from a in db.Clients
-    //                        join c in db.DepartPlans on a.hotel_fk equals c.hotel_fk
-    //                        join b in db.Hotels on a.hotel_fk equals b.ID
-    //                        orderby c.time
-    //                        where a.oneway == false && a.depart_list == Depart_list
-    //                        select new { title = "[" + a.PNR + "] " + a.names, a.PNR, a.names, a.phone, a.PAX, hotel = b.name + ": " + c.time.Value.Hours + ":" + c.time.Value.Minutes };
-    //            JavaScriptSerializer jsonSer = new JavaScriptSerializer();
-    //            return jsonSer.Serialize(query);
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return "Data Error: " + ex.Message;
-    //    }
-
-
-
-    //}
 
     private int insertUpdateDepartPlan()
     {
@@ -147,8 +89,6 @@ public class DepartHelper
                                  (a.date_dep.Value == date2 && a.num_dep == num2)
                            select a;
             }
-
-
 
             if (_clients != null)
             {
@@ -180,36 +120,63 @@ public class DepartHelper
 
 
 }
+namespace HolaAPI.Models
+{
+    public class DepartPlanDTO
+    {
+        public string depart_list { get; set; }
+        public string hotel { get; set; }
+        public int hotel_fk { get; set; }
+        public Nullable<System.TimeSpan> time { get; set; }
+        public int PAX { get; set; }
+
+    }
+
+    public class Departure
+    {
+        public string PNR { get; set; }
+        public string names { get; set; }
+        public string title { get; set; }
+        public TimeSpan time { get; set; }
+        public string hotel { get; set; }
+        public string phone { get; set; }
+        public int PAX { get; set; }
+        public string meeting_point { get; set; }
+        //public int MKF { get; set; }
+        //public int VDN { get; set; }
+        //public int FIG { get; set; }
+        //public int MON { get; set; }
+
+    }
+
+}
 
 
 
 
 
-
-
-
-//private List<FlightDetails> boxFlightInfo(string flights_str)
+//public string getDepartureList()
 //{
 
-//    string[] flights_array = flights_str.Split('~');
-//    List<FlightDetails> flights = new List<FlightDetails>();
-
-//    FlightDetails flight1 = new FlightDetails();
-//    string[] flight_arr_1 = flights_array[0].Split('_');
-//    flight1.num = flight_arr_1[0];
-//    flight1.date = Convert.ToDateTime(flight_arr_1[1]);
-//    flights.Add(flight1);
-
-//    if (flights_array.Length > 1)
+//    try
 //    {
-//        FlightDetails flight2 = new FlightDetails();
-//        string[] flight_arr_2 = flights_array[1].Split('_');
-//        flight2.num = flight_arr_2[0];
-//        flight2.date = Convert.ToDateTime(flight_arr_2[1]);
-//        flights.Add(flight2);
+//        using (HolaShalomDBEntities db = new HolaShalomDBEntities())
+//        {
+//            var query = from a in db.Clients
+//                        join c in db.DepartPlans on a.hotel_fk equals c.hotel_fk
+//                        join b in db.Hotels on a.hotel_fk equals b.ID
+//                        orderby c.time
+//                        where a.oneway == false && a.depart_list == Depart_list
+//                        select new { title = "[" + a.PNR + "] " + a.names, a.PNR, a.names, a.phone, a.PAX, hotel = b.name + ": " + c.time.Value.Hours + ":" + c.time.Value.Minutes };
+//            JavaScriptSerializer jsonSer = new JavaScriptSerializer();
+//            return jsonSer.Serialize(query);
+//        }
+//    }
+//    catch (Exception ex)
+//    {
+//        return "Data Error: " + ex.Message;
 //    }
 
-//    return flights;
 
 
 //}

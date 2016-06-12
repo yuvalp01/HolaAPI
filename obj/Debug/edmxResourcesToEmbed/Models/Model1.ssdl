@@ -24,12 +24,11 @@
     <Property Name="hotel_fk" Type="int" Nullable="false" />
     <Property Name="agency_fk" Type="int" Nullable="false" />
     <Property Name="oneway" Type="bit" Nullable="false" />
-    <Property Name="comments" Type="nvarchar" MaxLength="250" />
+    <Property Name="canceled" Type="bit" Nullable="false" />
+    <Property Name="comments" Type="nvarchar(max)" />
     <Property Name="date_update" Type="datetime" Nullable="false" />
     <Property Name="depart_list" Type="nvarchar" MaxLength="50" />
     <Property Name="arrival_list_fk" Type="nvarchar" MaxLength="50" />
-    <Property Name="canceled" Type="bit" Nullable="false" />
-    <Property Name="deleted" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="DepartPlan">
     <Key>
@@ -72,6 +71,20 @@
     <Property Name="name" Type="varchar" MaxLength="50" />
     <Property Name="address" Type="varchar" MaxLength="250" />
     <Property Name="meeting_point" Type="varchar" MaxLength="250" />
+    <Property Name="city" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Payments">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="sale_fk" Type="int" Nullable="false" />
+    <Property Name="sum" Type="decimal" Precision="10" Scale="1" Nullable="false" />
+    <Property Name="date_payment" Type="date" Nullable="false" />
+    <Property Name="date_update" Type="datetime" Nullable="false" />
+    <Property Name="paid_to" Type="int" Nullable="false" />
+    <Property Name="method" Type="varchar" MaxLength="50" />
+    <Property Name="_type" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Products">
     <Key>
@@ -87,19 +100,20 @@
   </EntityType>
   <EntityType Name="Sales">
     <Key>
-      <PropertyRef Name="PNR" />
-      <PropertyRef Name="product_fk" />
+      <PropertyRef Name="ID" />
     </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PNR" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="agency_fk" Type="int" Nullable="false" />
     <Property Name="product_fk" Type="int" Nullable="false" />
+    <Property Name="plan_fk" Type="int" />
     <Property Name="persons" Type="int" Nullable="false" />
-    <Property Name="price" Type="decimal" Precision="10" Scale="1" Nullable="false" />
+    <Property Name="remained_pay" Type="decimal" Precision="10" Scale="1" Nullable="false" />
     <Property Name="sale_type" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="date_sale" Type="date" Nullable="false" />
     <Property Name="date_update" Type="datetime" Nullable="false" />
-    <Property Name="paid" Type="decimal" Precision="10" Scale="1" Nullable="false" />
     <Property Name="canceled" Type="bit" Nullable="false" />
-    <Property Name="deleted" Type="bit" Nullable="false" />
+    <Property Name="comments" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="TourPlan">
     <Key>
@@ -108,11 +122,52 @@
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="date" Type="date" Nullable="false" />
     <Property Name="time" Type="time" Precision="4" />
-    <Property Name="tour_fk" Type="int" />
+    <Property Name="product_fk" Type="int" />
     <Property Name="guide_fk" Type="int" />
-    <Property Name="comments" Type="nvarchar" MaxLength="500" />
+    <Property Name="comments" Type="nvarchar(max)" />
     <Property Name="date_update" Type="datetime" Nullable="false" />
+    <Property Name="canceled" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="Upload_temp">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="PNR" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="names" Type="nvarchar" MaxLength="250" Nullable="false" />
+    <Property Name="PAX" Type="int" Nullable="false" />
+    <Property Name="num_arr" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="date_arr" Type="date" Nullable="false" />
+    <Property Name="num_dep" Type="nvarchar" MaxLength="50" />
+    <Property Name="date_dep" Type="date" Nullable="false" />
+    <Property Name="phone" Type="nvarchar" MaxLength="50" />
+    <Property Name="hotel_name" Type="nvarchar" MaxLength="250" Nullable="false" />
+    <Property Name="comments" Type="nvarchar" MaxLength="500" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Client_Agencies">
+    <End Role="Agencies" Type="Self.Agencies" Multiplicity="1" />
+    <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Agencies">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Clients">
+        <PropertyRef Name="agency_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Client_Hotels">
+    <End Role="Hotels" Type="Self.Hotels" Multiplicity="1" />
+    <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hotels">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Clients">
+        <PropertyRef Name="hotel_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Clients_Flights_Arr">
     <End Role="Flights" Type="Self.Flights" Multiplicity="1" />
     <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
@@ -141,6 +196,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Payments_Sales">
+    <End Role="Sales" Type="Self.Sales" Multiplicity="1" />
+    <End Role="Payments" Type="Self.Payments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sales">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Payments">
+        <PropertyRef Name="sale_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Plan_Guides">
     <End Role="Guides" Type="Self.Guides" Multiplicity="0..1" />
     <End Role="TourPlan" Type="Self.TourPlan" Multiplicity="*" />
@@ -161,7 +228,19 @@
         <PropertyRef Name="ID" />
       </Principal>
       <Dependent Role="TourPlan">
-        <PropertyRef Name="tour_fk" />
+        <PropertyRef Name="product_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Sales_Sales">
+    <End Role="Sales" Type="Self.Sales" Multiplicity="1" />
+    <End Role="Sales1" Type="Self.Sales" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Sales">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Sales1">
+        <PropertyRef Name="ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -172,9 +251,19 @@
     <EntitySet Name="Flights" EntityType="Self.Flights" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Guides" EntityType="Self.Guides" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Hotels" EntityType="Self.Hotels" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Payments" EntityType="Self.Payments" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Sales" EntityType="Self.Sales" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TourPlan" EntityType="Self.TourPlan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Upload_temp" EntityType="Self.Upload_temp" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Client_Agencies" Association="Self.FK_Client_Agencies">
+      <End Role="Agencies" EntitySet="Agencies" />
+      <End Role="Clients" EntitySet="Clients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Client_Hotels" Association="Self.FK_Client_Hotels">
+      <End Role="Hotels" EntitySet="Hotels" />
+      <End Role="Clients" EntitySet="Clients" />
+    </AssociationSet>
     <AssociationSet Name="FK_Clients_Flights_Arr" Association="Self.FK_Clients_Flights_Arr">
       <End Role="Flights" EntitySet="Flights" />
       <End Role="Clients" EntitySet="Clients" />
@@ -183,6 +272,10 @@
       <End Role="Flights" EntitySet="Flights" />
       <End Role="Clients" EntitySet="Clients" />
     </AssociationSet>
+    <AssociationSet Name="FK_Payments_Sales" Association="Self.FK_Payments_Sales">
+      <End Role="Sales" EntitySet="Sales" />
+      <End Role="Payments" EntitySet="Payments" />
+    </AssociationSet>
     <AssociationSet Name="FK_Plan_Guides" Association="Self.FK_Plan_Guides">
       <End Role="Guides" EntitySet="Guides" />
       <End Role="TourPlan" EntitySet="TourPlan" />
@@ -190,6 +283,10 @@
     <AssociationSet Name="FK_Plan_Products" Association="Self.FK_Plan_Products">
       <End Role="Products" EntitySet="Products" />
       <End Role="TourPlan" EntitySet="TourPlan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Sales_Sales" Association="Self.FK_Sales_Sales">
+      <End Role="Sales" EntitySet="Sales" />
+      <End Role="Sales1" EntitySet="Sales" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

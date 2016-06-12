@@ -12,18 +12,17 @@ namespace HolaAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TourPlan
+    public partial class Payment
     {
         public int ID { get; set; }
-        public System.DateTime date { get; set; }
-        public Nullable<System.TimeSpan> time { get; set; }
-        public Nullable<int> product_fk { get; set; }
-        public Nullable<int> guide_fk { get; set; }
-        public string comments { get; set; }
+        public int sale_fk { get; set; }
+        public decimal sum { get; set; }
+        public System.DateTime date_payment { get; set; }
         public System.DateTime date_update { get; set; }
-        public bool canceled { get; set; }
+        public int paid_to { get; set; }
+        public string method { get; set; }
+        public string C_type { get; set; }
     
-        public virtual Guide Guide { get; set; }
-        public virtual Product Product { get; set; }
+        public virtual Sale Sale { get; set; }
     }
 }

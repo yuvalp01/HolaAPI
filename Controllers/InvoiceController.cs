@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using System.Web.Http.Description;
 
 namespace HolaAPI.Controllers
 {
@@ -13,64 +13,54 @@ namespace HolaAPI.Controllers
     {
         private HolaShalomDBEntities db = new HolaShalomDBEntities();
 
-
-        public IQueryable<HotelDTO> GetHotels()
+        [ResponseType(typeof(IQueryable<HotelDTO>))]
+        public IHttpActionResult GetHotels()
         {
-
-            return db.Hotels.Select(a => new HotelDTO { ID = a.ID, name = a.name, address = a.address });
+            try
+            {
+                var hotels = db.Hotels.Select(a => new HotelDTO { ID = a.ID, name = a.name, address = a.address });
+                return Ok(hotels);
+            }
+            catch (Exception ex)
+            {
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
+            }
         }
 
 
-        // 
+        [ResponseType(typeof(IQueryable<InvoiceSummary>))]
         [ActionName("GetInvoiceSummary")]
         [HttpGet]
-        public IQueryable<InvoiceSummary> GetInvoiceSummary([FromUri]int month, [FromUri]int year, [FromUri]int agency_fk)
+        public IHttpActionResult GetInvoiceSummary([FromUri]int month, [FromUri]int year, [FromUri]int agency_fk)
         {
+            try
+            {
+                var invoice = from a in db.Sales
+                              join b in db.Clients on a.PNR equals b.PNR
+                              join c in db.Products on a.product_fk equals c.ID
+                              where b.date_arr.Month == month && b.date_arr.Year == year && b.agency_fk == agency_fk
+                              group new { a, b, c } by new { b.date_arr, b.num_arr, rate = c.rate, c.name } into g
+                              orderby g.Key.date_arr
 
-            return from a in db.Sales
-                   join b in db.Clients on a.PNR equals b.PNR
-                   join c in db.Products on a.product_fk equals c.ID
-                   where b.date_arr.Month == month && b.date_arr.Year == year && b.agency_fk == agency_fk
-                   group new { a, b, c } by new { b.date_arr, b.num_arr, rate= c.rate, c.name } into g
-                   orderby g.Key.date_arr
+                              select new InvoiceSummary
+                              {
+                                  date_arr = g.Key.date_arr,
+                                  num_arr = g.Key.num_arr,
+                                  product = g.Key.name,
+                                  people = g.Sum(s => s.a.persons),
+                                  rate = g.Key.rate,
+                                  sum = g.Sum(s => s.a.persons) * g.Key.rate
 
-                   select new InvoiceSummary
-                   {
-                       date_arr = g.Key.date_arr,
-                       num_arr = g.Key.num_arr,
-                       product = g.Key.name,
-                       people = g.Sum(s => s.a.persons),
-                       rate = g.Key.rate,
-                       sum = g.Sum(s => s.a.persons) * g.Key.rate
-
-                   };
-
+                              };
+                return Ok(invoice);
+            }
+            catch (Exception ex)
+            {
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
+            }
         }
-
-
-
-        //[ActionName("GetPlan")] 
-        //[HttpGet]
-        //public IQueryable<DepartPlanDTO> GetPlan([FromUri]string depart_list)
-        //{
-
-        //    return from a in db.DepartPlans
-        //           where a.depart_list == depart_list
-        //           join b in db.Hotels on a.hotel_fk equals b.ID
-        //           orderby a.time
-        //           select new DepartPlanDTO
-        //           {
-        //               depart_list = a.depart_list,
-        //               hotel_fk = a.hotel_fk,
-        //               hotel = b.name,
-        //               time = a.time,
-        //               PAX = a.PAX
-        //           };
-
-        //}
-
-
-
 
         protected override void Dispose(bool disposing)
         {

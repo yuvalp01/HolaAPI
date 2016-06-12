@@ -14,9 +14,19 @@ namespace HolaAPI.Models
     
     public partial class Hotel
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Hotel()
+        {
+            this.Clients = new HashSet<Client>();
+        }
+    
         public int ID { get; set; }
         public string name { get; set; }
         public string address { get; set; }
         public string meeting_point { get; set; }
+        public string city { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Client> Clients { get; set; }
     }
 }

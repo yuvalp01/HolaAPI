@@ -12,18 +12,18 @@ namespace HolaAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TourPlan
+    public partial class Upload_temp
     {
-        public int ID { get; set; }
-        public System.DateTime date { get; set; }
-        public Nullable<System.TimeSpan> time { get; set; }
-        public Nullable<int> product_fk { get; set; }
-        public Nullable<int> guide_fk { get; set; }
+        public string PNR { get; set; }
+        public string names { get; set; }
+        public int PAX { get; set; }
+        public string num_arr { get; set; }
+        public System.DateTime date_arr { get; set; }
+        public string num_dep { get; set; }
+        public System.DateTime date_dep { get; set; }
+        public string phone { get; set; }
+        public string hotel_name { get; set; }
         public string comments { get; set; }
-        public System.DateTime date_update { get; set; }
-        public bool canceled { get; set; }
-    
-        public virtual Guide Guide { get; set; }
-        public virtual Product Product { get; set; }
+        public int ID { get; set; }
     }
 }
