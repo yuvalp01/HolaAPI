@@ -25,13 +25,6 @@ namespace HolaAPI.Controllers
             try
             {
 
-                //SystemDiagnosticsTraceWriter traceWriter = Configuration.Services.GetTraceWriter();
-                //traceWriter.Trace(Request, "My Category", TraceLevel.Info, "{0}", "This is a test trace message.");
-
-
-                //ITraceWriter traceWriter = Configuration.Services.GetTraceWriter();
-                //traceWriter.Trace(Request, "My Category", TraceLevel.Error, "{0}", "This is a test trace message.");
-
                 var agencies = db.Agencies.OrderBy(a => a.name)
                   .Select(a => new AgencyDTO { ID = a.ID, name = a.name, address = a.address }).ToList<AgencyDTO>();
                 return Ok(agencies);
@@ -111,27 +104,3 @@ namespace HolaAPI.Models
 
 }
 
-
-
-//// DELETE: api//5
-//[ResponseType(typeof(Agency))]
-//public IHttpActionResult Delete(int id)
-//{
-//    try
-//    {
-//        Agency agency = db.Agencies.Find(id);
-//        if (agency == null)
-//        {
-//            return Content(HttpStatusCode.NotFound, string.Format("ID '{0}' does not exist in the table.", id));
-//        }
-
-//        db.Agencies.Remove(agency);
-//        db.SaveChanges();
-//        return Ok(agency);
-//    }
-//    catch (Exception ex)
-//    {
-//        return Content(HttpStatusCode.BadRequest, ex.Message);
-
-//    }
-//}

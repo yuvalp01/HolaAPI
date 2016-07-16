@@ -12,23 +12,28 @@ namespace HolaAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Guide
+    public partial class Activity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Guide()
+        public Activity()
         {
             this.Events = new HashSet<Event>();
-            this.Events1 = new HashSet<Event>();
+            this.Rel_product_activity = new HashSet<Rel_product_activity>();
+            this.SoldActivities = new HashSet<SoldActivity>();
         }
     
         public int ID { get; set; }
         public string name { get; set; }
-        public string phone { get; set; }
-        public string role { get; set; }
+        public string category { get; set; }
+        public string subcat { get; set; }
+        public string city { get; set; }
+        public string direction { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Event> Events { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Event> Events1 { get; set; }
+        public virtual ICollection<Rel_product_activity> Rel_product_activity { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SoldActivity> SoldActivities { get; set; }
     }
 }

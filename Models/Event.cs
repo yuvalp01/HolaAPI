@@ -12,18 +12,20 @@ namespace HolaAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TourPlan
+    public partial class Event
     {
         public int ID { get; set; }
+        public int activity_fk { get; set; }
+        public Nullable<int> guide_fk { get; set; }
         public System.DateTime date { get; set; }
         public Nullable<System.TimeSpan> time { get; set; }
-        public Nullable<int> product_fk { get; set; }
-        public Nullable<int> guide_fk { get; set; }
         public string comments { get; set; }
         public System.DateTime date_update { get; set; }
         public bool canceled { get; set; }
+        public string category { get; set; }
     
+        public virtual Activity Activity { get; set; }
         public virtual Guide Guide { get; set; }
-        public virtual Product Product { get; set; }
+        public virtual Guide Guide1 { get; set; }
     }
 }

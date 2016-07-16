@@ -46,21 +46,6 @@ namespace HolaAPI.Controllers
                 return Content(HttpStatusCode.InternalServerError, rootEx.Message);
             }
 
-
-            //    // Find the matching order
-            //    Order order = ...;
-            //...
-
-
-            //// Return a response message containing the order and the cache control header
-            //OkResultWithCaching<Order> response = new OkResultWithCaching<Order>(order, this)
-            //{
-            //    CacheControlHeader = cacheControlHeader
-            //};
-            //    return response;
-
-
-
         }
 
 
@@ -108,45 +93,6 @@ namespace HolaAPI.Controllers
 
 
 
-
-        //// PUT: api/Hotels/5
-        //[ResponseType(typeof(void))]
-        //public async Task<IHttpActionResult> PutHotel(int id, Hotel hotel)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    if (id != hotel.ID)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    db.Entry(hotel).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await db.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!HotelExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return StatusCode(HttpStatusCode.NoContent);
-        //}
-
-
-
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -163,47 +109,4 @@ namespace HolaAPI.Controllers
     }
 }
 
-namespace HolaAPI.Models
-{
-    public class HotelDTO
-    {
-        public int ID { get; set; }
-        public string name { get; set; }
-        public string address { get; set; }
-    }
 
-}
-
-
-
-
-
-//// POST: api/Hotels
-//[ResponseType(typeof(Hotel))]
-//public async Task<IHttpActionResult> PostHotel(Hotel hotel)
-//{
-//    if (!ModelState.IsValid)
-//    {
-//        return BadRequest(ModelState);
-//    }
-
-//    db.Hotels.Add(hotel);
-
-//    try
-//    {
-//        await db.SaveChangesAsync();
-//    }
-//    catch (DbUpdateException)
-//    {
-//        if (HotelExists(hotel.ID))
-//        {
-//            return Conflict();
-//        }
-//        else
-//        {
-//            throw;
-//        }
-//    }
-
-//    return CreatedAtRoute("DefaultApi", new { id = hotel.ID }, hotel);
-//}

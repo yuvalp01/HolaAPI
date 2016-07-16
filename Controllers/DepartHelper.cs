@@ -21,10 +21,10 @@ public class DepartHelper
     public DateTime Date_dep_start { get; set; }
 
 
-    public DepartHelper(string date_dep_start_str, string flights_str)
+    public DepartHelper(DateTime date_dep_start, string flights_str)
     {
-        DateDepStartStr = date_dep_start_str;
-        Date_dep_start = Convert.ToDateTime(date_dep_start_str);
+        //DateDepStartStr = date_dep_start_str;
+       // Date_dep_start = Convert.ToDateTime(date_dep_start_str);
         Flights = DataHelper.boxFlightInfo(flights_str);
         string depart_list = date_dep_start_str + "_" + Flights[0].num;
         Depart_list = Flights.Count > 1 ? depart_list + "_" + Flights[1].num : depart_list;
@@ -77,7 +77,7 @@ public class DepartHelper
             if (Flights.Count == 1)
             {
                 _clients = from a in _clients
-                           where (a.date_dep.Value == date1 && a.num_dep == num1)
+                           where (a.date_dep == date1 && a.num_dep == num1)
                            select a;
             }
             else
@@ -85,8 +85,8 @@ public class DepartHelper
                 DateTime date2 = Flights[1].date;
                 string num2 = Flights[1].num;
                 _clients = from a in db.Clients
-                           where (a.date_dep.Value == date1 && a.num_dep == num1) ||
-                                 (a.date_dep.Value == date2 && a.num_dep == num2)
+                           where (a.date_dep == date1 && a.num_dep == num1) ||
+                                 (a.date_dep == date2 && a.num_dep == num2)
                            select a;
             }
 
@@ -124,10 +124,10 @@ namespace HolaAPI.Models
 {
     public class DepartPlanDTO
     {
-        public string depart_list { get; set; }
-        public string hotel { get; set; }
+        public int event_fk { get; set; }
+        public string hotel_name { get; set; }
         public int hotel_fk { get; set; }
-        public Nullable<System.TimeSpan> time { get; set; }
+        public TimeSpan time { get; set; }
         public int PAX { get; set; }
 
     }

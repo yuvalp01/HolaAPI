@@ -27,10 +27,10 @@ namespace HolaAPI.Controllers
                 {
                     ID = a.ID,
                     name = a.name,
-                    code = a.code,
-                    capacity = a.capacity,
+                    //code = a.code,
                     rate = a.rate,
-                    type = a.type
+                    category = a.category,
+                    subcat = a.subcat
                 });
 
                 return Ok(products.ToList());
@@ -49,15 +49,14 @@ namespace HolaAPI.Controllers
             {
                 string[] types_array = types.Split(',');
                 var products = from a in db.Products
-                       where types_array.Contains(a.type)
+                       where types_array.Contains(a.category)
                        select new ProductDTO
                        {
                            ID = a.ID,
                            name = a.name,
-                           code = a.code,
-                           capacity = a.capacity,
+                           //code = a.code,
                            rate = a.rate,
-                           type = a.type
+                           category = a.category
                        };
                 return Ok(products.ToList());
             }
@@ -103,18 +102,4 @@ namespace HolaAPI.Controllers
     }
 }
 
-namespace HolaAPI.Models
-{
-    public class ProductDTO
-    {
-
-        public int ID { get; set; }
-        public string name { get; set; }
-        public string code { get; set; }
-        public string type { get; set; }
-        public Nullable<decimal> rate { get; set; }
-        public Nullable<int> capacity { get; set; }
-    }
-
-}
 

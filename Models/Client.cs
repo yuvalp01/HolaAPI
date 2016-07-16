@@ -20,7 +20,7 @@ namespace HolaAPI.Models
         public string num_arr { get; set; }
         public System.DateTime date_arr { get; set; }
         public string num_dep { get; set; }
-        public Nullable<System.DateTime> date_dep { get; set; }
+        public System.DateTime date_dep { get; set; }
         public string phone { get; set; }
         public int hotel_fk { get; set; }
         public int agency_fk { get; set; }
@@ -28,8 +28,6 @@ namespace HolaAPI.Models
         public bool canceled { get; set; }
         public string comments { get; set; }
         public System.DateTime date_update { get; set; }
-        public string depart_list { get; set; }
-        public string arrival_list_fk { get; set; }
     
         public virtual Agency Agency { get; set; }
         public virtual Hotel Hotel { get; set; }

@@ -31,32 +31,33 @@ public class FlightDetails
     public string num { get; set; }
 }
 
-/// <summary>
-/// Summary description for JsonData
-/// </summary>
 public class ArrivalHelper
 {
 
 
-    public List<TourPlanDTO> getTourPlan(string date_start, string date_end)
+
+
+
+
+
+
+    public List<EventDTO> getTourPlan(string date_start, string date_end)
     {
         DateTime dateStart = Convert.ToDateTime(date_start);
         DateTime dateEnd = Convert.ToDateTime(date_end);
 
         using (HolaShalomDBEntities db = new HolaShalomDBEntities())
         {
-            var query = from a in db.TourPlans
-                        join b in db.Products on a.product_fk equals b.ID
+            var query = from a in db.Events
+                        join b in db.Activities on a.activity_fk equals b.ID
                         where a.date >= dateStart && a.date <= dateEnd
-                        select new TourPlanDTO
+                        select new EventDTO
                         {
                             date = a.date,
                             time = a.time.Value,
-                            tour_name = b.name,
+                            activity_name = b.name,
                             comments = a.comments
                         };
-
-
 
             return query.ToList();
 
@@ -64,6 +65,10 @@ public class ArrivalHelper
 
 
     }
+
+
+
+
 
 
     public List<Arrival> getListArrival(string date_start_str, string flights_str)
@@ -170,14 +175,3 @@ public class ArrivalHelper
 
 }
 
-
-
-//var clients_flight = _clients.Where(a => a.date_arr == date1 && a.num_arr == num1);
-
-//if (flights.Count == 2)
-//{
-//    DateTime date2 = flights[1].date;
-//    string num2 = flights[1].num;
-//    clients_flight = _clients.Where(a => (a.date_arr == date1 && a.num_arr == num1) || (a.date_arr == date2 && a.num_arr == num2));
-
-//}

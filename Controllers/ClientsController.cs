@@ -93,65 +93,6 @@ namespace HolaAPI.Controllers
 
 
         [ResponseType(typeof(Client))]
-        public IHttpActionResult Post([FromBody]Client client)
-        {
-            try
-            {
-              
-                client.date_update = DateTime.Now;
-                client.canceled = false;
-                db.Clients.Add(client);
-                //extract transportation type from products table. It could be either 'bus' 'one way bus'
-                int _product_fk;
-                if (!client.oneway) { _product_fk = 1; }
-                else { _product_fk = 2; }
-                //all agencies except for Hola Shalom (100) are BIZ. BIZ clients already paid to the agency
-                string _sale_type = "BIZ";
-                decimal _remained_pay = 0;
-                if (client.agency_fk==100)
-                {
-                    _sale_type = "PRI";
-                    _remained_pay = db.Products.SingleOrDefault(a => a.ID == _product_fk).rate;
-
-                }
-
-                Sale sale = new Sale()
-                {
-                    PNR = client.PNR,
-                    agency_fk = client.agency_fk,
-                    product_fk = _product_fk,
-                    remained_pay = _remained_pay,
-                    persons = client.PAX,
-                    sale_type = _sale_type,
-                    date_update = DateTime.Now,
-                    date_sale = DateTime.Today,
-                    canceled = false
-                };
-                db.Sales.Add(sale);
-                db.SaveChanges();
-                return Ok(client);
-            }
-
-            catch (Exception ex)
-            {
-                Exception rootEx = ex.GetBaseException();
-                SqlException sqleX = rootEx as SqlException;
-                if (sqleX != null)
-                {
-                    if (sqleX.Number == 2627)
-                    {
-                        string message = string.Format("The PNR <b>{0} (agency ID:{1})</b> already exists in the system.", client.PNR, client.agency_fk);
-                        return Content(HttpStatusCode.Conflict, message);
-                    }
-                }
-                return Content(HttpStatusCode.InternalServerError, rootEx.Message);
-            }
-
-
-        }
-
-
-        [ResponseType(typeof(Client))]
         [HttpPut]
         [Route("api/clients/CancelClient/{agency_fk}/{PNR}")]
         public IHttpActionResult CancelClient(int agency_fk, string PNR)
@@ -170,7 +111,7 @@ namespace HolaAPI.Controllers
                 }
 
                 db.SaveChanges();
-                return Ok(client_to_cancel);
+                return Ok("{}");
             }
             catch (Exception ex)
             {
@@ -188,7 +129,7 @@ namespace HolaAPI.Controllers
         [Route("api/clients/UpdateClient/{agency_fk}/{PNR}")]
         public IHttpActionResult UpdateClient(int agency_fk, string PNR, [FromBody] ClientDTO client)
         {
-
+            if (client.PAX == 0) throw new Exception("PAX cannot be zero");
             try
             {
                 var client_to_update = db.Clients.SingleOrDefault(a => a.agency_fk == agency_fk && a.PNR == PNR && a.canceled == false);
@@ -222,7 +163,7 @@ namespace HolaAPI.Controllers
                 }
 
                 db.SaveChanges();
-                return Ok(client_to_update);
+                return Ok("{}");
             }
 
             catch (Exception ex)
@@ -247,34 +188,6 @@ namespace HolaAPI.Controllers
     }
 }
 
-namespace HolaAPI.Models
-{
-    public class ClientDTO
-    {
-
-        public string PNR { get; set; }
-        public string names { get; set; }
-        public int PAX { get; set; }
-        public string num_arr { get; set; }
-        public DateTime date_arr { get; set; }
-        public string num_dep { get; set; }
-        public Nullable<DateTime> date_dep { get; set; }
-        public string phone { get; set; }
-        public int hotel_fk { get; set; }
-        public string hotel_name { get; set; }
-        public int agency_fk { get; set; }
-        public string agency_name { get; set; }
-        public bool oneway { get; set; }
-        public bool canceled { get; set; }
-        public string comments { get; set; }
-        public DateTime date_update { get; set; }
-        public string depart_list { get; set; }
-        public string arrival_list_fk { get; set; }
-    }
-
-
-
-}
 
 
 
@@ -285,52 +198,60 @@ namespace HolaAPI.Models
 
 
 
-
-
-
-
-
-//public IQueryable<ClientDTO> GetClients()
-//{
-
-//    return db.Clients.Select(a => new ClientDTO
-//    {
-//        PNR = a.PNR,
-//        names = a.names,
-//        PAX = a.PAX,
-//        num_arr = a.num_arr,
-//        date_arr = a.date_arr,
-//        num_dep = a.num_dep,
-//        date_dep = a.date_dep,
-//        phone = a.phone,
-//        hotel_fk = a.hotel_fk,
-//        agency_fk = a.agency_fk,
-//        oneway = a.oneway,
-//        comments = a.comments
-
-//    });
-//}
-
-
-//// DELETE: api/Clients/5
 //[ResponseType(typeof(Client))]
-//public IHttpActionResult Delete(int PNR)
+//public IHttpActionResult Post([FromBody]Client client)
 //{
 //    try
 //    {
-//        Client client = db.Clients.Find(PNR);
-//        if (client == null)
+
+//        client.date_update = DateTime.Now;
+//        client.canceled = false;
+//        db.Clients.Add(client);
+//        //extract transportation type from products table. It could be either 'bus' 'one way bus'
+//        int _product_fk;
+//        if (!client.oneway) { _product_fk = 1; }
+//        else { _product_fk = 2; }
+//        //all agencies except for Hola Shalom (100) are External. External clients already paid to the agency
+//        string _sale_type = "External";
+//        decimal _remained_pay = 0;
+//        if (client.agency_fk==100)
 //        {
-//            return Content(HttpStatusCode.NotFound, string.Format("ID '{0}' does not exist in the table.", PNR));
+//            _sale_type = "Internal";
+//            _remained_pay = db.Products.SingleOrDefault(a => a.ID == _product_fk).rate;
+
 //        }
 
-//        db.Clients.Remove(client);
+//        Sale sale = new Sale()
+//        {
+//            PNR = client.PNR,
+//            agency_fk = client.agency_fk,
+//            product_fk = _product_fk,
+//            remained_pay = _remained_pay,
+//            persons = client.PAX,
+//            sale_type = _sale_type,
+//            date_update = DateTime.Now,
+//            date_sale = DateTime.Today,
+//            canceled = false
+//        };
+//        db.Sales.Add(sale);
 //        db.SaveChanges();
 //        return Ok(client);
 //    }
+
 //    catch (Exception ex)
 //    {
-//        return Content(HttpStatusCode.BadRequest, ex.Message);
-
+//        Exception rootEx = ex.GetBaseException();
+//        SqlException sqleX = rootEx as SqlException;
+//        if (sqleX != null)
+//        {
+//            if (sqleX.Number == 2627)
+//            {
+//                string message = string.Format("The PNR <b>{0} (agency ID:{1})</b> already exists in the system.", client.PNR, client.agency_fk);
+//                return Content(HttpStatusCode.Conflict, message);
+//            }
+//        }
+//        return Content(HttpStatusCode.InternalServerError, rootEx.Message);
 //    }
+
+
 //}

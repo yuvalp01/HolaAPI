@@ -32,11 +32,12 @@ namespace HolaAPI.Controllers
                             orderby a.date_update
                             join b in db.Products on a.product_fk equals b.ID
                             where a.agency_fk == agency_fk && a.PNR == PNR && a.canceled == false
-                            && types.Contains(b.type)
+                            && types.Contains(b.category)
                             select new SaleDTO
                             {
                                 ID = a.ID,
                                 PNR = a.PNR,
+                                agency_fk = a.agency_fk,
                                 product_fk = a.product_fk,
                                 product_name = b.name,
                                 persons = a.persons,
@@ -59,19 +60,24 @@ namespace HolaAPI.Controllers
         }
 
 
+
+
         [ResponseType(typeof(Sale))]
         public IHttpActionResult PostSale([FromBody]Sale sale)
         {
+            if (sale.persons == 0) throw new Exception("persons cannot be zero");
+
             try
             {
 
-                var sale_to_add = (from a in db.Sales
-                                   where a.product_fk == sale.product_fk && a.PNR == sale.PNR
-                                   orderby a.date_update descending
-                                   select a).FirstOrDefault();
+                var existing_sale = (from a in db.Sales
+                                     where a.product_fk == sale.product_fk && a.PNR == sale.PNR
+                                     orderby a.date_update descending
+                                     select a).FirstOrDefault();
 
-                //It is possible to add more than one sale to each reservation (client) ONLY if it is 'other'
-                if (sale_to_add != null && sale_to_add.canceled == false && sale_to_add.product_fk != 100)
+                //It is possible to add more than one sale to each reservation (client) Unless it's 'other tour'
+                var product = db.Products.SingleOrDefault(a => a.ID == sale.product_fk);
+                if (existing_sale != null && existing_sale.canceled == false && (!(product.category == "tour" && product.subcat == "other")))
                 {
                     return Content(HttpStatusCode.Conflict, "Sale already exists");
                 }
@@ -81,11 +87,12 @@ namespace HolaAPI.Controllers
                     sale.date_update = DateTime.Now;
                     sale.date_sale = DateTime.Today;
                     db.Sales.Add(sale);
+                    AddSaleEvents(sale);
 
                 }
 
                 db.SaveChanges();
-                return Ok(sale);
+                return Ok("{}");
             }
 
             catch (Exception ex)
@@ -103,18 +110,22 @@ namespace HolaAPI.Controllers
         [ResponseType(typeof(Sale))]
         [HttpPut]
         [Route("api/sales/CancelSale/{ID}")]
-        //public IHttpActionResult CancelSale(  string PNR, int product_fk)
-        //public IHttpActionResult CancelSale([FromBody] SaleDTO sale)
         public IHttpActionResult CancelSale(int ID)
         {
             try
             {
-                //var sale_to_update = db.Sales.SingleOrDefault(a => a.PNR == sale.PNR && a.product_fk == sale.product_fk && a.canceled==false);
                 var sale_to_update = db.Sales.SingleOrDefault(a => a.ID == ID && a.canceled == false);
                 sale_to_update.canceled = true;
                 sale_to_update.date_update = DateTime.Now;
+
+                var soldActivities = db.SoldActivities.Where(a => a.sale_fk == ID);
+                foreach (SoldActivity sa in soldActivities)
+                {
+                    sa.canceled = true;
+                }
+
                 db.SaveChanges();
-                return Ok(sale_to_update);
+                return Ok("{}");
             }
             catch (Exception ex)
             {
@@ -128,20 +139,23 @@ namespace HolaAPI.Controllers
         [ResponseType(typeof(Sale))]
         [HttpPut]
         [Route("api/sales/UpdateSale/{ID}")]
-        public IHttpActionResult UpdateSale([FromBody] SaleDTO sale, int ID)
+        public IHttpActionResult UpdateSale([FromBody] Sale sale, int ID)
         {
+            if (sale.persons == 0) throw new Exception("persons cannot be zero");
             try
             {
-                var sale_to_update = db.Sales.SingleOrDefault(a => a.ID == ID  && a.canceled == false);
-
-                //TODO: Block possibility for updaing price directly. enable only through Payments table
+                var sale_to_update = db.Sales.SingleOrDefault(a => a.ID == ID && a.canceled == false);
+                //Patch for null comment bug
+                sale.comments = sale.comments ?? "";
+                //TODO: next version: Block possibility for updaing price directly. enable only through Payments table
 
                 sale_to_update.remained_pay = sale.remained_pay;
                 sale_to_update.comments = sale.comments;
                 sale_to_update.persons = sale.persons;
                 sale_to_update.date_update = DateTime.Now;
+
                 db.SaveChanges();
-                return Ok(sale_to_update);
+                return Ok("{}");
             }
 
             catch (Exception ex)
@@ -155,20 +169,27 @@ namespace HolaAPI.Controllers
         [ResponseType(typeof(Sale))]
         [HttpPut]
         [Route("api/sales/UpdateTransport/{ID}")]
-        public IHttpActionResult UpdateTransport([FromBody] SaleDTO sale, int ID)
+        public IHttpActionResult UpdateTransport([FromBody] Sale sale, int ID)
         {
             try
             {
                 var sale_to_update = db.Sales.SingleOrDefault(a => a.ID == ID && a.canceled == false);
 
-                //TODO: Block possibility for updaing price directly. enable only through Payments table
+                //TODO: next version Block possibility for updaing price directly. enable only through Payments table
 
                 sale_to_update.remained_pay = sale.remained_pay;
                 sale_to_update.comments = sale.comments;
                 sale_to_update.product_fk = sale.product_fk;
                 sale_to_update.date_update = DateTime.Now;
+
+                //Cancel old sale events:
+                var saleEvent_old = db.SoldActivities.Where(a => a.sale_fk == ID).ToList();
+                saleEvent_old.ForEach(a => a.canceled = true);
+                //Add the new ones:
+                AddSaleEvents(sale_to_update);
+
                 db.SaveChanges();
-                return Ok(sale_to_update);
+                return Ok("{}");
             }
 
             catch (Exception ex)
@@ -180,6 +201,26 @@ namespace HolaAPI.Controllers
         }
 
 
+        private void AddSaleEvents(Sale sale)
+        {
+            var activities = from a in db.Activities
+                             join b in db.Rel_product_activity on a.ID equals b.activity_fk
+                             where b.product_fk == sale.product_fk
+                             select a;
+
+            foreach (var activity in activities)
+            {
+                SoldActivity saleEvent = new SoldActivity();
+                saleEvent.Sale = sale;
+                saleEvent.PNR = sale.PNR;
+                saleEvent.agency_fk = sale.agency_fk;
+                saleEvent.date_update = sale.date_update;
+                saleEvent.canceled = sale.canceled;
+                saleEvent.activity_fk = activity.ID;
+                saleEvent.event_fk = 0;
+                db.SoldActivities.Add(saleEvent);
+            }
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -202,6 +243,21 @@ namespace HolaAPI.Controllers
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //not in use yet
         [ResponseType(typeof(List<SaleDTO>))]
         [HttpGet]
@@ -210,22 +266,22 @@ namespace HolaAPI.Controllers
             try
             {
                 var sales = (from a in db.Sales
-                            join b in db.Products on a.product_fk equals b.ID
-                            where a.canceled == false
-                            select new SaleDTO
-                            {
-                                ID = a.ID,
-                                PNR = a.PNR,
-                                product_fk = a.product_fk,
-                                product_name = b.name,
-                                persons = a.persons,
-                                remained_pay = a.remained_pay,
-                                sale_type = a.sale_type,
-                                date_sale = a.date_sale,
-                                date_update = a.date_update,
+                             join b in db.Products on a.product_fk equals b.ID
+                             where a.canceled == false
+                             select new SaleDTO
+                             {
+                                 ID = a.ID,
+                                 PNR = a.PNR,
+                                 product_fk = a.product_fk,
+                                 product_name = b.name,
+                                 persons = a.persons,
+                                 remained_pay = a.remained_pay,
+                                 sale_type = a.sale_type,
+                                 date_sale = a.date_sale,
+                                 date_update = a.date_update,
 
 
-                            }).ToList<SaleDTO>();
+                             }).ToList<SaleDTO>();
                 return Ok(sales);
             }
             catch (Exception ex)
@@ -313,136 +369,3 @@ namespace HolaAPI.Controllers
     }
 }
 
-namespace HolaAPI.Models
-{
-    public class SaleDTO
-    {
-
-        public int ID { get; set; }
-        public string PNR { get; set; }
-        public int product_fk { get; set; }
-        public string product_name { get; set; }
-        public int persons { get; set; }
-        public decimal remained_pay { get; set; }
-        public string sale_type { get; set; }
-        public DateTime date_sale { get; set; }
-        public DateTime date_update { get; set; }
-        public string comments { get; set; }
-
-    }
-
-}
-
-
-
-
-//[ResponseType(typeof(Sale))]
-//public IHttpActionResult PutSale([FromBody]Sale sale)
-//{
-//    try
-//    {
-
-//        var sale_to_update = db.Sales.SingleOrDefault(a => a.PNR == sale.PNR && a.product_fk == sale.product_fk);
-//        sale_to_update.persons = sale.persons;
-//        sale_to_update.comments = sale.comments;
-//        sale_to_update.price = sale.price;
-//        sale_to_update.date_update = DateTime.Now;
-
-//        db.SaveChanges();
-//        return Ok(sale_to_update);
-//    }
-
-//    catch (Exception ex)
-//    {
-//        Exception rootEx = ex.GetBaseException();
-//        return Content(HttpStatusCode.BadRequest, rootEx.Message);
-//    }
-//}
-
-
-//SqlException innerException = rootEx as SqlException;
-//if (innerException != null && innerException.Number == 2627)
-//{
-//    return Content(HttpStatusCode.Conflict, innerException.Message);
-
-//}
-
-
-//var update_sale = db.Sales.SingleOrDefault(a => a.product_fk == sale.product_fk && a.PNR == sale.PNR && a.canceled==false);
-
-//if (update_sale != null && update_sale.canceled == true)
-//{
-
-//    update_sale.price = sale.price;
-//    update_sale.persons = sale.persons;
-//    update_sale.sale_type = sale.sale_type;
-//    update_sale.paid = sale.paid;
-//    update_sale.comments = sale.comments;
-//    update_sale.date_sale = sale.date_sale;
-//    update_sale.date_update = DateTime.Now;
-//    update_sale.canceled = false;
-//    update_sale.deleted = false;
-//}
-
-
-//[ResponseType(typeof(Sale))]
-//[HttpPut]
-//[ActionName("UpdatePrice")]
-
-//public IHttpActionResult UpdatePrice([FromBody] SaleDTO sale)
-//{
-//    try
-//    {
-//        var sale_to_update = db.Sales.SingleOrDefault(a => a.PNR == sale.PNR && a.product_fk == sale.product_fk&& a.canceled == false);
-//        sale_to_update.price = sale.price;
-//        sale_to_update.date_update = DateTime.Now;
-//        db.SaveChanges();
-//        return Ok(sale_to_update);
-//    }
-
-//    catch (Exception ex)
-//    {
-//        Exception rootEx = ex.GetBaseException();
-//        return Content(HttpStatusCode.BadRequest, rootEx.Message);
-//    }
-//}
-
-
-//[ActionName("UpdatePlan")]
-//[HttpPut]
-//public DepartPlanDTO UpdatePlan([FromBody] DepartPlanDTO line)
-//{
-
-//    DepartPlan line_to_update = db.DepartPlans.Find(line.depart_list, line.hotel_fk);
-//    line_to_update.time = line.time;
-//    db.SaveChanges();
-//    return line;
-//}
-
-
-
-
-
-
-//// DELETE: api/Clients/5
-//[ResponseType(typeof(Client))]
-//public IHttpActionResult Delete(int PNR)
-//{
-//    try
-//    {
-//        Client client = db.Clients.Find(PNR);
-//        if (client == null)
-//        {
-//            return Content(HttpStatusCode.NotFound, string.Format("ID '{0}' does not exist in the table.", PNR));
-//        }
-
-//        db.Clients.Remove(client);
-//        db.SaveChanges();
-//        return Ok(client);
-//    }
-//    catch (Exception ex)
-//    {
-//        return Content(HttpStatusCode.BadRequest, ex.Message);
-
-//    }
-//}

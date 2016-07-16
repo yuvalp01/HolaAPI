@@ -81,14 +81,26 @@ namespace HolaAPI.Controllers
 
         }
 
-        [ResponseType (typeof( List<DepartPlanDTO>))]
+
+        [ResponseType(typeof(List<DepartPlanDTO>))]
         [ActionName("CreatePlan")]
         [HttpPost]
-        public IHttpActionResult  CreatePlan([FromUri] string date_dep_start, [FromUri] string flights)
+        public IHttpActionResult CreatePlan([FromBody] DateTime dateDepStart, [FromBody] List< Flight> flights)
         {
             try
             {
-                DepartHelper helper = new DepartHelper(date_dep_start, flights);
+
+                DepartHelper helper = new DepartHelper(dateDepStart, flights);
+
+                //Clear past lists:
+                db.DepartPlans.RemoveRange(db.DepartPlans.Where(a => a.depart_list.StartsWith(dateDepStart)));
+                db.Clients.Where(a => a.depart_list.StartsWith(DateDepStartStr)).ToList().ForEach(a => a.depart_list = "");
+                db.SaveChanges();
+                //Insert and update new:
+                insertUpdateDepartPlan();
+
+                return getDepartPlan();
+
                 List<DepartPlanDTO> departPlan = helper.getNewDepartPlan();
                 return Ok(departPlan);
             }
@@ -98,10 +110,31 @@ namespace HolaAPI.Controllers
                 return Content(HttpStatusCode.InternalServerError, rootEx.Message);
                 throw;
             }
-
-
-
         }
+
+
+
+        //[ResponseType (typeof( List<DepartPlanDTO>))]
+        //[ActionName("CreatePlan")]
+        //[HttpPost]
+        //public IHttpActionResult  CreatePlan([FromUri] string date_dep_start, [FromUri] string flights)
+        //{
+        //    try
+        //    {
+        //        DepartHelper helper = new DepartHelper(date_dep_start, flights);
+        //        List<DepartPlanDTO> departPlan = helper.getNewDepartPlan();
+        //        return Ok(departPlan);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Exception rootEx = ex.GetBaseException();
+        //        return Content(HttpStatusCode.InternalServerError, rootEx.Message);
+        //        throw;
+        //    }
+        //}
+
+
+
         [ResponseType(typeof(DepartPlanDTO))]
         [ActionName("UpdatePlan")]
         [HttpPut]

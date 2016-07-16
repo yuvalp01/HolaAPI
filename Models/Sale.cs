@@ -18,13 +18,13 @@ namespace HolaAPI.Models
         public Sale()
         {
             this.Payments = new HashSet<Payment>();
+            this.SoldActivities = new HashSet<SoldActivity>();
         }
     
         public int ID { get; set; }
         public string PNR { get; set; }
         public int agency_fk { get; set; }
         public int product_fk { get; set; }
-        public Nullable<int> plan_fk { get; set; }
         public int persons { get; set; }
         public decimal remained_pay { get; set; }
         public string sale_type { get; set; }
@@ -33,9 +33,11 @@ namespace HolaAPI.Models
         public bool canceled { get; set; }
         public string comments { get; set; }
     
+        public virtual Agency Agency { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Payment> Payments { get; set; }
-        public virtual Sale Sales1 { get; set; }
-        public virtual Sale Sale1 { get; set; }
+        public virtual Product Product { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SoldActivity> SoldActivities { get; set; }
     }
 }

@@ -25,16 +25,19 @@ namespace HolaAPI.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Activity> Activities { get; set; }
         public virtual DbSet<Agency> Agencies { get; set; }
         public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<DepartPlan> DepartPlans { get; set; }
+        public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Flight> Flights { get; set; }
         public virtual DbSet<Guide> Guides { get; set; }
         public virtual DbSet<Hotel> Hotels { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Rel_product_activity> Rel_product_activity { get; set; }
         public virtual DbSet<Sale> Sales { get; set; }
-        public virtual DbSet<TourPlan> TourPlans { get; set; }
+        public virtual DbSet<SoldActivity> SoldActivities { get; set; }
         public virtual DbSet<Upload_temp> Upload_temp { get; set; }
     }
 }

@@ -94,4 +94,3 @@ C:\inetpub\wwwroot\HolaAPI\bin\System.Web.Http.xml
 C:\inetpub\wwwroot\HolaAPI\bin\System.Web.Http.WebHost.xml
 C:\inetpub\wwwroot\HolaAPI\obj\Debug\HolaAPI.dll
 C:\inetpub\wwwroot\HolaAPI\obj\Debug\HolaAPI.pdb
-C:\inetpub\wwwroot\HolaAPI\obj\Debug\HolaAPI.csprojResolveAssemblyReference.cache

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using HolaAPI.Models;
+using System.Linq.Expressions;
 
 namespace HolaAPI.Controllers
 {
@@ -24,16 +25,16 @@ namespace HolaAPI.Controllers
         {
             try
             {
-                var flights  =  db.Flights.Select(a => new FlightDTO
+                var flights = db.Flights.Select(a => new FlightDTO
                 {
                     num = a.num,
                     date = a.date,
                     time = a.time,
                     destination = a.destination,
                     direction = a.direction,
-                    time_approved = a.time_approved,
+                    //time_approved = a.time_approved,
                     date_update = a.date_update
-                }).ToList();
+                }).OrderBy(a=>new { a.date,a.time}).ToList();
                 return Ok(flights);
             }
             catch (Exception ex)
@@ -58,7 +59,7 @@ namespace HolaAPI.Controllers
                     time = a.time,
                     destination = a.destination,
                     direction = a.direction,
-                    time_approved = a.time_approved,
+                    //time_approved = a.time_approved,
                     date_update = a.date_update
 
 
@@ -78,17 +79,17 @@ namespace HolaAPI.Controllers
         {
             try
             {
-            var flights =  db.Flights.Where(a => a.direction == direction).Select(a => new FlightDTO
-            {
-                num = a.num,
-                date = a.date,
-                time = a.time,
-                destination = a.destination,
-                direction = a.direction,
-                time_approved = a.time_approved,
-                date_update = a.date_update,
+                var flights = db.Flights.Where(a => a.direction == direction).Select(a => new FlightDTO
+                {
+                    num = a.num,
+                    date = a.date,
+                    time = a.time,
+                    destination = a.destination,
+                    direction = a.direction,
+                    //time_approved = a.time_approved,
+                    date_update = a.date_update,
 
-            }).ToList();
+                }).ToList();
                 return Ok(flights);
             }
             catch (Exception ex)
@@ -99,55 +100,15 @@ namespace HolaAPI.Controllers
 
         }
 
-        [ActionName("getFlights2Days")]
-        [ResponseType(typeof(IQueryable<FlightDTO>))]
-        [HttpGet]
-        public IHttpActionResult getFlights2Days(string direction, string date)
-        {
-            try
-            {
-                direction = direction.ToUpper();
-                DateTime _date = Convert.ToDateTime(date);
-                DateTime date_next = _date.AddDays(1);
-
-                var flights = db.Flights.Where(a => a.direction == direction && a.date >= _date && a.date <= date_next);
-                if (direction == "IN")
-                {
-
-                    var flights_in =  from a in db.Clients
-                           let local_num = a.num_arr
-                           let local_date = a.date_arr
-                           group a by new { local_num, local_date } into g
-                           join b in flights on new { num = g.Key.local_num, date = (DateTime)g.Key.local_date } equals new { b.num, date = b.date }
-                           where b.date >= _date && b.date <= date_next
-                           orderby new { b.date, b.time }
-                           select new FlightDTO { num = g.Key.local_num, date = g.Key.local_date, time = b.time, direction = b.direction, sum = g.Sum(s => s.PAX), ph = string.Empty };
-                    return Ok(flights_in);
-                }
-                else
-                {
 
 
-                    var flights_out =  from a in db.Clients
-                           let local_num = a.num_dep
-                           let local_date = a.date_dep
-                           group a by new { local_num, local_date } into g
-                           join b in flights on new { num = g.Key.local_num, date = (DateTime)g.Key.local_date } equals new { b.num, date = b.date }
-                           where b.date >= _date && b.date <= date_next
-                           orderby new { b.date, b.time }
-                           select new FlightDTO { num = g.Key.local_num, date = g.Key.local_date.Value, time = b.time, direction = b.direction, sum = g.Sum(s => s.PAX), ph = string.Empty };
-                    return Ok(flights_out);
-                }
 
-            }
-            catch (Exception ex)
-            {
-                Exception rootEx = ex.GetBaseException();
-                return Content(HttpStatusCode.BadRequest, rootEx.Message);
-            }
 
-        }
 
+
+
+
+        //TODO: replace
         [ResponseType(typeof(FlightsStats))]
         //[ActionName("GetFlightsStats")]
         [HttpGet]
@@ -196,21 +157,55 @@ namespace HolaAPI.Controllers
 
         }
 
-        // DELETE: not in use yet 
-        [ResponseType(typeof(Flight))]
-        public IHttpActionResult Delete(int PNR)
+
+
+
+
+
+
+        [ResponseType(typeof(Event))]
+        [HttpPut]
+        [ActionName("UpdateFlight")]
+        //[Route("api/flights/UpdateEvent/{num}/{date}/{time}")]
+        public IHttpActionResult UpdateFlight([FromBody] Flight client_flight )
         {
             try
             {
-                Flight flight = db.Flights.Find(PNR);
+                Flight db_flight = db.Flights.Find(client_flight.num, client_flight.date);
+                db_flight.time = client_flight.time;
+                db_flight.date_update = DateTime.Now;
+
+                db.SaveChanges();
+                return Ok("{}");
+            }
+
+
+            catch (Exception ex)
+            {
+                Exception rootEx = ex.GetBaseException();
+                return Content(HttpStatusCode.BadRequest, rootEx.Message);
+            }
+        }
+
+
+
+
+
+        [HttpDelete]
+        [Route("api/flights/DeleteFlight/{num}/{date}")]
+        public IHttpActionResult DeleteFlight(string num, DateTime date)
+        {
+            try
+            {
+                Flight flight = db.Flights.Find(num,date);
                 if (flight == null)
                 {
-                    return Content(HttpStatusCode.NotFound, string.Format("ID '{0}' does not exist in the table.", PNR));
+                    return Content(HttpStatusCode.NotFound, string.Format("Flight '{0}' on {1} does not exist in the table.", num,date.ToString("YYYY-MM-dd")));
                 }
 
                 db.Flights.Remove(flight);
                 db.SaveChanges();
-                return Ok(flight);
+                return Ok("{}");
             }
             catch (Exception ex)
             {
@@ -236,21 +231,10 @@ namespace HolaAPI.Controllers
 
 namespace HolaAPI.Models
 {
-    public class FlightDTO
-    {
 
-        public string num { get; set; }
-        public System.DateTime date { get; set; }
-        public string time { get; set; }
-        public string destination { get; set; }
-        public string direction { get; set; }
-        public Nullable<System.TimeSpan> time_approved { get; set; }
-        public Nullable<System.DateTime> date_update { get; set; }
-        public int sum { get; set; }
-        public string ph { get; set; }
 
-        //      public string flight_details { get; set; }
-    }
+
+
     public class FlightsStats
     {
         public int IN { get; set; }
@@ -261,4 +245,66 @@ namespace HolaAPI.Models
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//[Route("api/flights/GetFlightTransportDep/{date}/{activity_fk}")]
+//[ResponseType(typeof(IQueryable<FlightDTO>))]
+//[HttpGet]
+//public IHttpActionResult GetFlightTransportDep(DateTime date, int activity_fk)
+//{
+
+//    //Expression<Func<Client, string>> num_flight = a => a.num_dep;
+//    //Expression<Func<Client, DateTime>> date_flight = a => a.date_dep;
+
+//    DateTime _date = Convert.ToDateTime(date);
+//    DateTime date_next = _date.AddDays(1);
+//    //Get all the activity sales for this route
+//    var all_activities = from a in db.rel_sale_activities
+//                         join b in db.Sales on a.sale_fk equals b.ID
+//                         join c in db.Clients on new { b.PNR, b.agency_fk } equals new { c.PNR, c.agency_fk }
+//                         join d in db.Events on a.event_fk equals d.ID into gj
+//                         from e in gj.DefaultIfEmpty()
+//                         where a.activity_fk == activity_fk && a.canceled == false
+//                         select new
+//                         {
+//                             a.ID,
+//                             c.date_dep,
+//                             c.num_dep,
+//                             b.persons,
+//                             a.activity_fk,
+//                             event_fk = (e == null ? 0 : e.ID)
+//                         };
+//    //Get only the ones that still not assign and group them by:
+//    var all_not_assign = from n in all_activities
+//                         group n by new { n.num_dep, n.date_dep, n.event_fk  } into g
+//                         where g.Key.event_fk == 0
+//                         select new
+//                         {
+//                             num = g.Key.num_dep,
+//                             date = g.Key.date_dep,
+//                             sum = g.Sum(a => a.persons)
+//                         };
+//   //Combine with real flights
+//    var flights = from a in all_not_assign
+//                  group a by new { a.date, a.num } into g
+//                  join f in db.Flights on new {  g.Key.date, g.Key.num } equals new { f.date, f.num }
+//                  let last_hour = new TimeSpan(6, 0, 0)
+//                  where f.date == _date || (f.date == date_next && f.time < last_hour)
+//                  select new FlightDTO { num = g.Key.num, date = g.Key.date, time = f.time, sum = g.Sum(s => s.sum) };
 

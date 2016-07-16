@@ -14,9 +14,8 @@ namespace HolaAPI.Models
     
     public partial class DepartPlan
     {
-        public string depart_list { get; set; }
+        public int event_fk { get; set; }
         public int hotel_fk { get; set; }
-        public Nullable<System.DateTime> date_dep_start { get; set; }
         public Nullable<System.TimeSpan> time { get; set; }
         public int PAX { get; set; }
     }

@@ -14,6 +14,7 @@ namespace HolaAPI.Models
     
     public partial class Upload_temp
     {
+        public int ID { get; set; }
         public string PNR { get; set; }
         public string names { get; set; }
         public int PAX { get; set; }
@@ -24,6 +25,5 @@ namespace HolaAPI.Models
         public string phone { get; set; }
         public string hotel_name { get; set; }
         public string comments { get; set; }
-        public int ID { get; set; }
     }
 }

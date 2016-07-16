@@ -1,12 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="HolaShalomDBModelStoreContainer" CdmEntityContainer="HolaShalomDBEntities">
+    <EntitySetMapping Name="Activities">
+      <EntityTypeMapping TypeName="HolaShalomDBModel.Activity">
+        <MappingFragment StoreEntitySet="Activities">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="subcat" ColumnName="subcat" />
+          <ScalarProperty Name="city" ColumnName="city" />
+          <ScalarProperty Name="direction" ColumnName="direction" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Agencies">
       <EntityTypeMapping TypeName="HolaShalomDBModel.Agency">
         <MappingFragment StoreEntitySet="Agencies">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="hebrew" ColumnName="hebrew" />
           <ScalarProperty Name="address" ColumnName="address" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -28,19 +39,31 @@
           <ScalarProperty Name="canceled" ColumnName="canceled" />
           <ScalarProperty Name="comments" ColumnName="comments" />
           <ScalarProperty Name="date_update" ColumnName="date_update" />
-          <ScalarProperty Name="depart_list" ColumnName="depart_list" />
-          <ScalarProperty Name="arrival_list_fk" ColumnName="arrival_list_fk" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="DepartPlans">
       <EntityTypeMapping TypeName="HolaShalomDBModel.DepartPlan">
         <MappingFragment StoreEntitySet="DepartPlan">
-          <ScalarProperty Name="depart_list" ColumnName="depart_list" />
+          <ScalarProperty Name="event_fk" ColumnName="event_fk" />
           <ScalarProperty Name="hotel_fk" ColumnName="hotel_fk" />
-          <ScalarProperty Name="date_dep_start" ColumnName="date_dep_start" />
           <ScalarProperty Name="time" ColumnName="time" />
           <ScalarProperty Name="PAX" ColumnName="PAX" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Events">
+      <EntityTypeMapping TypeName="HolaShalomDBModel.Event">
+        <MappingFragment StoreEntitySet="Events">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="activity_fk" ColumnName="activity_fk" />
+          <ScalarProperty Name="guide_fk" ColumnName="guide_fk" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="comments" ColumnName="comments" />
+          <ScalarProperty Name="date_update" ColumnName="date_update" />
+          <ScalarProperty Name="canceled" ColumnName="canceled" />
+          <ScalarProperty Name="category" ColumnName="category" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -52,7 +75,6 @@
           <ScalarProperty Name="time" ColumnName="time" />
           <ScalarProperty Name="destination" ColumnName="destination" />
           <ScalarProperty Name="direction" ColumnName="direction" />
-          <ScalarProperty Name="time_approved" ColumnName="time_approved" />
           <ScalarProperty Name="date_update" ColumnName="date_update" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -85,10 +107,11 @@
           <ScalarProperty Name="sale_fk" ColumnName="sale_fk" />
           <ScalarProperty Name="sum" ColumnName="sum" />
           <ScalarProperty Name="date_payment" ColumnName="date_payment" />
-          <ScalarProperty Name="date_update" ColumnName="date_update" />
           <ScalarProperty Name="paid_to" ColumnName="paid_to" />
           <ScalarProperty Name="method" ColumnName="method" />
           <ScalarProperty Name="C_type" ColumnName="_type" />
+          <ScalarProperty Name="date_update" ColumnName="date_update" />
+          <ScalarProperty Name="canceled" ColumnName="canceled" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -97,11 +120,20 @@
         <MappingFragment StoreEntitySet="Products">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="code" ColumnName="code" />
-          <ScalarProperty Name="type" ColumnName="type" />
-          <ScalarProperty Name="hebrew" ColumnName="hebrew" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="subcat" ColumnName="subcat" />
           <ScalarProperty Name="rate" ColumnName="rate" />
-          <ScalarProperty Name="capacity" ColumnName="capacity" />
+          <ScalarProperty Name="city" ColumnName="city" />
+          <ScalarProperty Name="oneway" ColumnName="oneway" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rel_product_activity">
+      <EntityTypeMapping TypeName="HolaShalomDBModel.Rel_product_activity">
+        <MappingFragment StoreEntitySet="Rel_product_activity">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="product_fk" ColumnName="product_fk" />
+          <ScalarProperty Name="activity_fk" ColumnName="activity_fk" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -112,7 +144,6 @@
           <ScalarProperty Name="PNR" ColumnName="PNR" />
           <ScalarProperty Name="agency_fk" ColumnName="agency_fk" />
           <ScalarProperty Name="product_fk" ColumnName="product_fk" />
-          <ScalarProperty Name="plan_fk" ColumnName="plan_fk" />
           <ScalarProperty Name="persons" ColumnName="persons" />
           <ScalarProperty Name="remained_pay" ColumnName="remained_pay" />
           <ScalarProperty Name="sale_type" ColumnName="sale_type" />
@@ -123,15 +154,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TourPlans">
-      <EntityTypeMapping TypeName="HolaShalomDBModel.TourPlan">
-        <MappingFragment StoreEntitySet="TourPlan">
+    <EntitySetMapping Name="SoldActivities">
+      <EntityTypeMapping TypeName="HolaShalomDBModel.SoldActivity">
+        <MappingFragment StoreEntitySet="SoldActivities">
           <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="date" ColumnName="date" />
-          <ScalarProperty Name="time" ColumnName="time" />
-          <ScalarProperty Name="product_fk" ColumnName="product_fk" />
-          <ScalarProperty Name="guide_fk" ColumnName="guide_fk" />
-          <ScalarProperty Name="comments" ColumnName="comments" />
+          <ScalarProperty Name="PNR" ColumnName="PNR" />
+          <ScalarProperty Name="agency_fk" ColumnName="agency_fk" />
+          <ScalarProperty Name="sale_fk" ColumnName="sale_fk" />
+          <ScalarProperty Name="activity_fk" ColumnName="activity_fk" />
+          <ScalarProperty Name="event_fk" ColumnName="event_fk" />
           <ScalarProperty Name="date_update" ColumnName="date_update" />
           <ScalarProperty Name="canceled" ColumnName="canceled" />
         </MappingFragment>
@@ -140,6 +171,7 @@
     <EntitySetMapping Name="Upload_temp">
       <EntityTypeMapping TypeName="HolaShalomDBModel.Upload_temp">
         <MappingFragment StoreEntitySet="Upload_temp">
+          <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="PNR" ColumnName="PNR" />
           <ScalarProperty Name="names" ColumnName="names" />
           <ScalarProperty Name="PAX" ColumnName="PAX" />
@@ -150,7 +182,6 @@
           <ScalarProperty Name="phone" ColumnName="phone" />
           <ScalarProperty Name="hotel_name" ColumnName="hotel_name" />
           <ScalarProperty Name="comments" ColumnName="comments" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

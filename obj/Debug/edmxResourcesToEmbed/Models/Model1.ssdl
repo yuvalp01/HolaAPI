@@ -1,12 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="HolaShalomDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Activities">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="250" Nullable="false" />
+    <Property Name="category" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="subcat" Type="varchar" MaxLength="50" />
+    <Property Name="city" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="direction" Type="varchar" MaxLength="20" />
+  </EntityType>
   <EntityType Name="Agencies">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="hebrew" Type="nvarchar" MaxLength="50" />
     <Property Name="address" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Clients">
@@ -18,8 +28,8 @@
     <Property Name="PAX" Type="int" Nullable="false" />
     <Property Name="num_arr" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="date_arr" Type="date" Nullable="false" />
-    <Property Name="num_dep" Type="varchar" MaxLength="20" />
-    <Property Name="date_dep" Type="date" />
+    <Property Name="num_dep" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="date_dep" Type="date" Nullable="false" />
     <Property Name="phone" Type="nvarchar" MaxLength="50" />
     <Property Name="hotel_fk" Type="int" Nullable="false" />
     <Property Name="agency_fk" Type="int" Nullable="false" />
@@ -27,19 +37,30 @@
     <Property Name="canceled" Type="bit" Nullable="false" />
     <Property Name="comments" Type="nvarchar(max)" />
     <Property Name="date_update" Type="datetime" Nullable="false" />
-    <Property Name="depart_list" Type="nvarchar" MaxLength="50" />
-    <Property Name="arrival_list_fk" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="DepartPlan">
     <Key>
-      <PropertyRef Name="depart_list" />
+      <PropertyRef Name="event_fk" />
       <PropertyRef Name="hotel_fk" />
     </Key>
-    <Property Name="depart_list" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="event_fk" Type="int" Nullable="false" />
     <Property Name="hotel_fk" Type="int" Nullable="false" />
-    <Property Name="date_dep_start" Type="date" />
     <Property Name="time" Type="time" Precision="7" />
     <Property Name="PAX" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Events">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="activity_fk" Type="int" Nullable="false" />
+    <Property Name="guide_fk" Type="int" />
+    <Property Name="date" Type="date" Nullable="false" />
+    <Property Name="time" Type="time" Precision="4" />
+    <Property Name="comments" Type="nvarchar(max)" />
+    <Property Name="date_update" Type="datetime" Nullable="false" />
+    <Property Name="canceled" Type="bit" Nullable="false" />
+    <Property Name="category" Type="varchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="Flights">
     <Key>
@@ -48,11 +69,10 @@
     </Key>
     <Property Name="num" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="date" Type="date" Nullable="false" />
-    <Property Name="time" Type="char" MaxLength="5" />
+    <Property Name="time" Type="time" Precision="4" Nullable="false" />
     <Property Name="destination" Type="nvarchar" MaxLength="50" />
     <Property Name="direction" Type="varchar" MaxLength="20" />
-    <Property Name="time_approved" Type="time" Precision="4" />
-    <Property Name="date_update" Type="datetime" />
+    <Property Name="date_update" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="Guides">
     <Key>
@@ -81,10 +101,11 @@
     <Property Name="sale_fk" Type="int" Nullable="false" />
     <Property Name="sum" Type="decimal" Precision="10" Scale="1" Nullable="false" />
     <Property Name="date_payment" Type="date" Nullable="false" />
-    <Property Name="date_update" Type="datetime" Nullable="false" />
     <Property Name="paid_to" Type="int" Nullable="false" />
     <Property Name="method" Type="varchar" MaxLength="50" />
     <Property Name="_type" Type="varchar" MaxLength="50" />
+    <Property Name="date_update" Type="datetime" Nullable="false" />
+    <Property Name="canceled" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Products">
     <Key>
@@ -92,11 +113,19 @@
     </Key>
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="code" Type="nvarchar" MaxLength="50" />
-    <Property Name="type" Type="nvarchar" MaxLength="50" />
-    <Property Name="hebrew" Type="nvarchar" MaxLength="50" />
+    <Property Name="category" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="subcat" Type="varchar" MaxLength="50" />
     <Property Name="rate" Type="decimal" Precision="10" Scale="1" Nullable="false" />
-    <Property Name="capacity" Type="int" />
+    <Property Name="city" Type="varchar" MaxLength="20" />
+    <Property Name="oneway" Type="bit" />
+  </EntityType>
+  <EntityType Name="Rel_product_activity">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="product_fk" Type="int" Nullable="false" />
+    <Property Name="activity_fk" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Sales">
     <Key>
@@ -106,7 +135,6 @@
     <Property Name="PNR" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="agency_fk" Type="int" Nullable="false" />
     <Property Name="product_fk" Type="int" Nullable="false" />
-    <Property Name="plan_fk" Type="int" />
     <Property Name="persons" Type="int" Nullable="false" />
     <Property Name="remained_pay" Type="decimal" Precision="10" Scale="1" Nullable="false" />
     <Property Name="sale_type" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -115,23 +143,24 @@
     <Property Name="canceled" Type="bit" Nullable="false" />
     <Property Name="comments" Type="nvarchar(max)" />
   </EntityType>
-  <EntityType Name="TourPlan">
+  <EntityType Name="SoldActivities">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
-    <Property Name="date" Type="date" Nullable="false" />
-    <Property Name="time" Type="time" Precision="4" />
-    <Property Name="product_fk" Type="int" />
-    <Property Name="guide_fk" Type="int" />
-    <Property Name="comments" Type="nvarchar(max)" />
-    <Property Name="date_update" Type="datetime" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PNR" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="agency_fk" Type="int" Nullable="false" />
+    <Property Name="sale_fk" Type="int" Nullable="false" />
+    <Property Name="activity_fk" Type="int" Nullable="false" />
+    <Property Name="event_fk" Type="int" />
+    <Property Name="date_update" Type="date" Nullable="false" />
     <Property Name="canceled" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Upload_temp">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PNR" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="names" Type="nvarchar" MaxLength="250" Nullable="false" />
     <Property Name="PAX" Type="int" Nullable="false" />
@@ -142,7 +171,6 @@
     <Property Name="phone" Type="nvarchar" MaxLength="50" />
     <Property Name="hotel_name" Type="nvarchar" MaxLength="250" Nullable="false" />
     <Property Name="comments" Type="nvarchar" MaxLength="500" />
-    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
   </EntityType>
   <Association Name="FK_Client_Agencies">
     <End Role="Agencies" Type="Self.Agencies" Multiplicity="1" />
@@ -183,7 +211,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Clients_Flights_Dep">
-    <End Role="Flights" Type="Self.Flights" Multiplicity="0..1" />
+    <End Role="Flights" Type="Self.Flights" Multiplicity="1" />
     <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Flights">
@@ -193,6 +221,30 @@
       <Dependent Role="Clients">
         <PropertyRef Name="num_dep" />
         <PropertyRef Name="date_dep" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Events_Activities">
+    <End Role="Activities" Type="Self.Activities" Multiplicity="1" />
+    <End Role="Events" Type="Self.Events" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activities">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Events">
+        <PropertyRef Name="activity_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Events_Guides">
+    <End Role="Guides" Type="Self.Guides" Multiplicity="0..1" />
+    <End Role="Events" Type="Self.Events" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Guides">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Events">
+        <PropertyRef Name="guide_fk" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -210,51 +262,114 @@
   </Association>
   <Association Name="FK_Plan_Guides">
     <End Role="Guides" Type="Self.Guides" Multiplicity="0..1" />
-    <End Role="TourPlan" Type="Self.TourPlan" Multiplicity="*" />
+    <End Role="Events" Type="Self.Events" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Guides">
         <PropertyRef Name="ID" />
       </Principal>
-      <Dependent Role="TourPlan">
+      <Dependent Role="Events">
         <PropertyRef Name="guide_fk" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Plan_Products">
-    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
-    <End Role="TourPlan" Type="Self.TourPlan" Multiplicity="*" />
+  <Association Name="FK_rel_product_activity_Activities">
+    <End Role="Activities" Type="Self.Activities" Multiplicity="1" />
+    <End Role="Rel_product_activity" Type="Self.Rel_product_activity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activities">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Rel_product_activity">
+        <PropertyRef Name="activity_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rel_product_activity_Products">
+    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+    <End Role="Rel_product_activity" Type="Self.Rel_product_activity" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Products">
         <PropertyRef Name="ID" />
       </Principal>
-      <Dependent Role="TourPlan">
+      <Dependent Role="Rel_product_activity">
         <PropertyRef Name="product_fk" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Sales_Sales">
+  <Association Name="FK_rel_sale_events_Activities">
+    <End Role="Activities" Type="Self.Activities" Multiplicity="1" />
+    <End Role="SoldActivities" Type="Self.SoldActivities" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activities">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="SoldActivities">
+        <PropertyRef Name="activity_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_rel_sale_events_Agencies">
+    <End Role="Agencies" Type="Self.Agencies" Multiplicity="1" />
+    <End Role="SoldActivities" Type="Self.SoldActivities" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Agencies">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="SoldActivities">
+        <PropertyRef Name="agency_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_rel_sale_events_Sales">
     <End Role="Sales" Type="Self.Sales" Multiplicity="1" />
-    <End Role="Sales1" Type="Self.Sales" Multiplicity="0..1" />
+    <End Role="SoldActivities" Type="Self.SoldActivities" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Sales">
         <PropertyRef Name="ID" />
       </Principal>
-      <Dependent Role="Sales1">
+      <Dependent Role="SoldActivities">
+        <PropertyRef Name="sale_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Sales_Agencies">
+    <End Role="Agencies" Type="Self.Agencies" Multiplicity="1" />
+    <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Agencies">
         <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Sales">
+        <PropertyRef Name="agency_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Sales_Products">
+    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+    <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Sales">
+        <PropertyRef Name="product_fk" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="HolaShalomDBModelStoreContainer">
+    <EntitySet Name="Activities" EntityType="Self.Activities" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Agencies" EntityType="Self.Agencies" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DepartPlan" EntityType="Self.DepartPlan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Events" EntityType="Self.Events" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Flights" EntityType="Self.Flights" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Guides" EntityType="Self.Guides" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Hotels" EntityType="Self.Hotels" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Payments" EntityType="Self.Payments" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rel_product_activity" EntityType="Self.Rel_product_activity" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Sales" EntityType="Self.Sales" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="TourPlan" EntityType="Self.TourPlan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SoldActivities" EntityType="Self.SoldActivities" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Upload_temp" EntityType="Self.Upload_temp" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Client_Agencies" Association="Self.FK_Client_Agencies">
       <End Role="Agencies" EntitySet="Agencies" />
@@ -272,21 +387,49 @@
       <End Role="Flights" EntitySet="Flights" />
       <End Role="Clients" EntitySet="Clients" />
     </AssociationSet>
+    <AssociationSet Name="FK_Events_Activities" Association="Self.FK_Events_Activities">
+      <End Role="Activities" EntitySet="Activities" />
+      <End Role="Events" EntitySet="Events" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Events_Guides" Association="Self.FK_Events_Guides">
+      <End Role="Guides" EntitySet="Guides" />
+      <End Role="Events" EntitySet="Events" />
+    </AssociationSet>
     <AssociationSet Name="FK_Payments_Sales" Association="Self.FK_Payments_Sales">
       <End Role="Sales" EntitySet="Sales" />
       <End Role="Payments" EntitySet="Payments" />
     </AssociationSet>
     <AssociationSet Name="FK_Plan_Guides" Association="Self.FK_Plan_Guides">
       <End Role="Guides" EntitySet="Guides" />
-      <End Role="TourPlan" EntitySet="TourPlan" />
+      <End Role="Events" EntitySet="Events" />
     </AssociationSet>
-    <AssociationSet Name="FK_Plan_Products" Association="Self.FK_Plan_Products">
+    <AssociationSet Name="FK_rel_product_activity_Activities" Association="Self.FK_rel_product_activity_Activities">
+      <End Role="Activities" EntitySet="Activities" />
+      <End Role="Rel_product_activity" EntitySet="Rel_product_activity" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rel_product_activity_Products" Association="Self.FK_Rel_product_activity_Products">
       <End Role="Products" EntitySet="Products" />
-      <End Role="TourPlan" EntitySet="TourPlan" />
+      <End Role="Rel_product_activity" EntitySet="Rel_product_activity" />
     </AssociationSet>
-    <AssociationSet Name="FK_Sales_Sales" Association="Self.FK_Sales_Sales">
+    <AssociationSet Name="FK_rel_sale_events_Activities" Association="Self.FK_rel_sale_events_Activities">
+      <End Role="Activities" EntitySet="Activities" />
+      <End Role="SoldActivities" EntitySet="SoldActivities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_rel_sale_events_Agencies" Association="Self.FK_rel_sale_events_Agencies">
+      <End Role="Agencies" EntitySet="Agencies" />
+      <End Role="SoldActivities" EntitySet="SoldActivities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_rel_sale_events_Sales" Association="Self.FK_rel_sale_events_Sales">
       <End Role="Sales" EntitySet="Sales" />
-      <End Role="Sales1" EntitySet="Sales" />
+      <End Role="SoldActivities" EntitySet="SoldActivities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Sales_Agencies" Association="Self.FK_Sales_Agencies">
+      <End Role="Agencies" EntitySet="Agencies" />
+      <End Role="Sales" EntitySet="Sales" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Sales_Products" Association="Self.FK_Sales_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Sales" EntitySet="Sales" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

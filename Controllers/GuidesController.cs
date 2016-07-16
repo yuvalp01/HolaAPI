@@ -96,16 +96,4 @@ namespace HolaAPI.Controllers
     }
 }
 
-namespace HolaAPI.Models
-{
-    public class GuideDTO
-    {
-        public int ID { get; set; }
-        public string name { get; set; }
-        public string phone { get; set; }
-    }
-
-}
-
-
 

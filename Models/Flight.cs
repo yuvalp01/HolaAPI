@@ -23,11 +23,10 @@ namespace HolaAPI.Models
     
         public string num { get; set; }
         public System.DateTime date { get; set; }
-        public string time { get; set; }
+        public System.TimeSpan time { get; set; }
         public string destination { get; set; }
         public string direction { get; set; }
-        public Nullable<System.TimeSpan> time_approved { get; set; }
-        public Nullable<System.DateTime> date_update { get; set; }
+        public System.DateTime date_update { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Client> Clients { get; set; }

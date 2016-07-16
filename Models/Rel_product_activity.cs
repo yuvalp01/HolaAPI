@@ -12,18 +12,13 @@ namespace HolaAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Payment
+    public partial class Rel_product_activity
     {
         public int ID { get; set; }
-        public int sale_fk { get; set; }
-        public decimal sum { get; set; }
-        public System.DateTime date_payment { get; set; }
-        public int paid_to { get; set; }
-        public string method { get; set; }
-        public string C_type { get; set; }
-        public System.DateTime date_update { get; set; }
-        public bool canceled { get; set; }
+        public int product_fk { get; set; }
+        public int activity_fk { get; set; }
     
-        public virtual Sale Sale { get; set; }
+        public virtual Activity Activity { get; set; }
+        public virtual Product Product { get; set; }
     }
 }
