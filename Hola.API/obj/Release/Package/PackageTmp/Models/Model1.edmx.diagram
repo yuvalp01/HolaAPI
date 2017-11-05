@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1e0478df844849ac91fd8015791d80c5" Name="Diagram1">
+        <EntityTypeShape EntityType="HolaShalomDBModel.Activity" Width="1.5" PointX="6" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Agency" Width="1.5" PointX="0.75" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Client" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.DepartPlan" Width="1.5" PointX="10.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Event" Width="1.5" PointX="8.25" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Flight" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Guide" Width="1.5" PointX="6" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Hotel" Width="1.5" PointX="0.75" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Payment" Width="1.5" PointX="8.25" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Product" Width="1.5" PointX="3.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Rel_product_activity" Width="1.5" PointX="11.25" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Sale" Width="1.5" PointX="6" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.SoldActivity" Width="1.5" PointX="8.25" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HolaShalomDBModel.Upload_temp" Width="1.5" PointX="10.75" PointY="8.75" IsExpanded="true" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Events_Activities" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_rel_product_activity_Activities" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_rel_sale_events_Activities" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Client_Agencies" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_rel_sale_events_Agencies" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Sales_Agencies" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Client_Hotels" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Clients_Flights_Arr" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Clients_Flights_Dep" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Events_Guides" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Plan_Guides" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Payments_Sales" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Rel_product_activity_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_Sales_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="HolaShalomDBModel.FK_rel_sale_events_Sales" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

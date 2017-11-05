@@ -1,0 +1,97 @@
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\ApplicationInsights.config
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\roslyn\csc.exe
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\roslyn\Microsoft.CodeAnalysis.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\roslyn\Microsoft.CSharp.Core.targets
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\roslyn\Microsoft.VisualBasic.Core.targets
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\roslyn\System.Collections.Immutable.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\roslyn\System.Reflection.Metadata.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\roslyn\vbc.exe
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\roslyn\VBCSCompiler.exe
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\roslyn\VBCSCompiler.exe.config
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\HolaAPI.dll.config
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\HolaAPI.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\HolaAPI.pdb
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\EntityFramework.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\EntityFramework.SqlServer.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.AI.Agent.Intercept.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.AI.DependencyCollector.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.AI.PerfCounterCollector.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.AI.ServerTelemetryChannel.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.AI.Web.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.AI.WindowsServer.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.ApplicationInsights.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Newtonsoft.Json.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\System.Net.Http.Formatting.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\System.Web.Http.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\System.Web.Http.WebHost.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\EntityFramework.xml
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\EntityFramework.SqlServer.xml
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.AI.DependencyCollector.xml
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.AI.ServerTelemetryChannel.xml
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.AI.Web.xml
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.AI.WindowsServer.xml
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.ApplicationInsights.xml
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\Newtonsoft.Json.xml
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\System.Net.Http.Formatting.xml
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\System.Web.Http.xml
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\bin\System.Web.Http.WebHost.xml
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\obj\Debug\HolaAPI.dll
+c:\users\yuval\documents\visual studio 2015\Projects\HolaAPI\HolaAPI\obj\Debug\HolaAPI.pdb
+C:\inetpub\wwwroot\HolaAPI\bin\ApplicationInsights.config
+C:\inetpub\wwwroot\HolaAPI\bin\roslyn\csc.exe
+C:\inetpub\wwwroot\HolaAPI\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\inetpub\wwwroot\HolaAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\inetpub\wwwroot\HolaAPI\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\inetpub\wwwroot\HolaAPI\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\inetpub\wwwroot\HolaAPI\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\inetpub\wwwroot\HolaAPI\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\inetpub\wwwroot\HolaAPI\bin\roslyn\System.Collections.Immutable.dll
+C:\inetpub\wwwroot\HolaAPI\bin\roslyn\System.Reflection.Metadata.dll
+C:\inetpub\wwwroot\HolaAPI\bin\roslyn\vbc.exe
+C:\inetpub\wwwroot\HolaAPI\bin\roslyn\VBCSCompiler.exe
+C:\inetpub\wwwroot\HolaAPI\bin\roslyn\VBCSCompiler.exe.config
+C:\inetpub\wwwroot\HolaAPI\bin\HolaAPI.dll.config
+C:\inetpub\wwwroot\HolaAPI\bin\HolaAPI.dll
+C:\inetpub\wwwroot\HolaAPI\bin\HolaAPI.pdb
+C:\inetpub\wwwroot\HolaAPI\bin\Antlr3.Runtime.dll
+C:\inetpub\wwwroot\HolaAPI\bin\EntityFramework.dll
+C:\inetpub\wwwroot\HolaAPI\bin\EntityFramework.SqlServer.dll
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.AI.Agent.Intercept.dll
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.AI.DependencyCollector.dll
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.AI.Web.dll
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.AI.WindowsServer.dll
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.ApplicationInsights.dll
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.Web.Infrastructure.dll
+C:\inetpub\wwwroot\HolaAPI\bin\Newtonsoft.Json.dll
+C:\inetpub\wwwroot\HolaAPI\bin\System.Net.Http.Formatting.dll
+C:\inetpub\wwwroot\HolaAPI\bin\System.Web.Http.dll
+C:\inetpub\wwwroot\HolaAPI\bin\System.Web.Http.Tracing.dll
+C:\inetpub\wwwroot\HolaAPI\bin\System.Web.Http.WebHost.dll
+C:\inetpub\wwwroot\HolaAPI\bin\System.Web.Optimization.dll
+C:\inetpub\wwwroot\HolaAPI\bin\WebGrease.dll
+C:\inetpub\wwwroot\HolaAPI\bin\Antlr3.Runtime.pdb
+C:\inetpub\wwwroot\HolaAPI\bin\EntityFramework.xml
+C:\inetpub\wwwroot\HolaAPI\bin\EntityFramework.SqlServer.xml
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.AI.DependencyCollector.xml
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.AI.Web.xml
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.AI.WindowsServer.xml
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.ApplicationInsights.xml
+C:\inetpub\wwwroot\HolaAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\inetpub\wwwroot\HolaAPI\bin\Newtonsoft.Json.xml
+C:\inetpub\wwwroot\HolaAPI\bin\System.Web.Http.Tracing.xml
+C:\inetpub\wwwroot\HolaAPI\bin\System.Web.Optimization.xml
+C:\inetpub\wwwroot\HolaAPI\bin\System.Net.Http.Formatting.xml
+C:\inetpub\wwwroot\HolaAPI\bin\System.Web.Http.xml
+C:\inetpub\wwwroot\HolaAPI\bin\System.Web.Http.WebHost.xml
+C:\inetpub\wwwroot\HolaAPI\obj\Debug\HolaAPI.dll
+C:\inetpub\wwwroot\HolaAPI\obj\Debug\HolaAPI.pdb
+C:\inetpub\wwwroot\HolaAPI\obj\Debug\HolaAPI.csprojResolveAssemblyReference.cache
